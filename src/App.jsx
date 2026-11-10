@@ -133,6 +133,7 @@ function EnquiryModal({ open, onClose, selected }) {
 function Header({onEnquire}) {
   const [scrolled,setScrolled]=useState(false),[menu,setMenu]=useState(false);
   useEffect(()=>{const fn=()=>setScrolled(window.scrollY>24);window.addEventListener('scroll',fn);fn();return()=>window.removeEventListener('scroll',fn)},[]);
+  useEffect(()=>{if(!menu)return;const closeOnEscape=e=>e.key==='Escape'&&setMenu(false);window.addEventListener('keydown',closeOnEscape);return()=>window.removeEventListener('keydown',closeOnEscape)},[menu]);
   const links=[['Residences','/#residences'],['Corporate stays','/corporate-accommodation-nairobi/'],['The experience','/#experience'],['About','/#about']];
   return <header className={`site-header ${scrolled?'scrolled':''}`}>
     <a className="brand" href="/" aria-label="House of Amelia home"><img className="brand-logo" src="/assets/hoa-logo.png" alt="House of Amelia logo"/><span>HOUSE <i>of</i> AMELIA</span><small>PREMIUM SERVICED ACCOMMODATION</small></a>
