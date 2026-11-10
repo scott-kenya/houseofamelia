@@ -28,15 +28,36 @@ for (const page of pages) {
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, html);
 }
-for (const page of residencePages) {
-  const canonical = `https://www.houseofamelia.co.ke/${page.path}/`;
-  const content = `<main class="seo-prerender"><header><p>HOUSE OF AMELIA · RESIDENCE COLLECTION</p><h1>${page.h1}</h1><p>${page.intro}</p><p><strong>Indicative nightly rate: ${page.rate}</strong> · Monthly quotation on request</p><img src="${page.image}" alt="Illustrative residence image" style="max-width:100%;height:auto"/><p><a href="/#residences">Explore all residences</a> · <a href="https://wa.me/254112415949">Enquire on WhatsApp</a></p></header><section><h2>Explore the residence</h2><p>View the residence gallery, amenities and stay information. Images are illustrative placeholders and should be replaced with current photographs of the specific property before publication.</p></section></main>`;
-  let html = base.replace(/<title>.*?<\/title>/, `<title>${page.title}</title>`)
-    .replace(/<meta name="description" content="[^"]*"\s*\/>/, `<meta name="description" content="${page.description}" />`)
-    .replace(/<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${canonical}" />`)
-    .replace('<div id="root"></div>', `<div id="root">${content}</div>`);
-  const out = path.join('dist', page.path, 'index.html');
-  fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.writeFileSync(out, html);
+// Render the residence routes with the same React tree the browser will hydrate.
+// This prevents the temporary, unstyled SEO-only markup from flashing before the app mounts.
+import { createServer } from 'vite';
+import { createElement, StrictMode } from 'react';
+import { renderToString } from 'react-dom/server';
+
+const vite = await createServer({
+  configFile: './vite.config.js',
+  server: { middlewareMode: true },
+  appType: 'custom'
+});
+
+try {
+  const { default: App } = await vite.ssrLoadModule('/src/App.jsx');
+  for (const page of residencePages) {
+    const route = `/${page.path}/`;
+    globalThis.window = { location: { pathname: route } };
+    const content = renderToString(createElement(StrictMode, null, createElement(App)));
+    const canonical = `https://www.houseofamelia.co.ke${route}`;
+    const html = base.replace(/<title>.*?<\\/title>/, `<title>${page.title}</title>`)
+      .replace(/<meta name="description" content="[^"]*"\\s*\\/>/, `<meta name="description" content="${page.description}" />`)
+      .replace(/<link rel="canonical" href="[^"]*"\\s*\\/>/, `<link rel="canonical" href="${canonical}" />`)
+      .replace('<div id="root"></div>', `<div id="root" data-react-prerender="true">${content}</div>`);
+    const out = path.join('dist', page.path, 'index.html');
+    fs.mkdirSync(path.dirname(out), { recursive: true });
+    fs.writeFileSync(out, html);
+  }
+} finally {
+  delete globalThis.window;
+  await vite.close();
 }
-console.log(`Prerendered ${pages.length + residencePages.length} SEO landing pages.`);
+
+console.log(`Prerendered ${pages.length} SEO landing pages and ${residencePages.length} hydrated residence pages.`);
