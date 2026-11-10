@@ -47,9 +47,9 @@ try {
     globalThis.window = { location: { pathname: route } };
     const content = renderToString(createElement(StrictMode, null, createElement(App)));
     const canonical = `https://www.houseofamelia.co.ke${route}`;
-    const html = base.replace(/<title>.*?<\\/title>/, `<title>${page.title}</title>`)
-      .replace(/<meta name="description" content="[^"]*"\\s*\\/>/, `<meta name="description" content="${page.description}" />`)
-      .replace(/<link rel="canonical" href="[^"]*"\\s*\\/>/, `<link rel="canonical" href="${canonical}" />`)
+    const html = base.replace(new RegExp('<title>.*?</title>'), `<title>${page.title}</title>`)
+      .replace(new RegExp('<meta name="description" content="[^"]*"\\\\s*/>'), `<meta name="description" content="${page.description}" />`)
+      .replace(new RegExp('<link rel="canonical" href="[^"]*"\\\\s*/>'), `<link rel="canonical" href="${canonical}" />`)
       .replace('<div id="root"></div>', `<div id="root" data-react-prerender="true">${content}</div>`);
     const out = path.join('dist', page.path, 'index.html');
     fs.mkdirSync(path.dirname(out), { recursive: true });
