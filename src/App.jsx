@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight, ArrowUpRight, Building2, CalendarDays, Check, CheckCircle2,
   ChevronDown, Clock3, Globe2, Headphones, MapPin, Menu, MessageCircle,
@@ -59,9 +59,34 @@ function EnquiryModal({ open, onClose, selected }) {
   const [company, setCompany] = useState('');
   const [notes, setNotes] = useState('');
   useEffect(() => { if (selected) setProperty(selected); }, [selected]);
-  useEffect(() => { if (!open) return; const fn = e => e.key === 'Escape' && onClose(); window.addEventListener('keydown', fn); document.body.style.overflow='hidden'; return () => {window.removeEventListener('keydown',fn);document.body.style.overflow='';}; }, [open,onClose]);
+  const dialogRef = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    const previousFocus = document.activeElement;
+    const dialog = dialogRef.current;
+    const getFocusable = () => [...(dialog?.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])') || [])];
+    getFocusable()[0]?.focus();
+    const handleKeyDown = event => {
+      if (event.key === 'Escape') { onClose(); return; }
+      if (event.key !== 'Tab') return;
+      const items = getFocusable();
+      if (!items.length) { event.preventDefault(); dialog?.focus(); return; }
+      const first = items[0], last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+      if (previousFocus instanceof HTMLElement) previousFocus.focus();
+    };
+  }, [open, onClose]);
   if (!open) return null;
   const chosen = residences.find(r => r.id === property);
+  const now = new Date();
+  const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
   const submit = e => {
     e.preventDefault();
     const msg = [
@@ -78,7 +103,7 @@ function EnquiryModal({ open, onClose, selected }) {
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
   };
   return <div className="modal-backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose()}>
-    <div className="enquiry-modal" role="dialog" aria-modal="true" aria-labelledby="enquiry-title">
+    <div ref={dialogRef} className="enquiry-modal" role="dialog" aria-modal="true" aria-labelledby="enquiry-title" tabIndex={-1}>
       <button className="modal-close" onClick={onClose} aria-label="Close enquiry"><X/></button>
       <span className="eyebrow">Start a conversation</span>
       <h2 id="enquiry-title">Tell us about your stay.</h2>
@@ -86,7 +111,7 @@ function EnquiryModal({ open, onClose, selected }) {
       <form onSubmit={submit}>
         <label>Preferred residence<select value={property} onChange={e=>setProperty(e.target.value)}>{residences.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
         <div className="form-grid">
-          <label>Arrival date<input type="date" value={arrival} onChange={e=>setArrival(e.target.value)}/></label>
+          <label>Arrival date<input type="date" min={localToday} value={arrival} onChange={e=>setArrival(e.target.value)}/></label>
           <label>Expected stay<select value={duration} onChange={e=>setDuration(e.target.value)}><option>1–3 nights</option><option>4–7 nights</option><option>1–4 weeks</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12 months or more</option><option>Flexible / not sure</option></select></label>
         </div>
         <div className="form-grid">
@@ -108,12 +133,13 @@ function EnquiryModal({ open, onClose, selected }) {
 function Header({onEnquire}) {
   const [scrolled,setScrolled]=useState(false),[menu,setMenu]=useState(false);
   useEffect(()=>{const fn=()=>setScrolled(window.scrollY>24);window.addEventListener('scroll',fn);fn();return()=>window.removeEventListener('scroll',fn)},[]);
+  useEffect(()=>{if(!menu)return;const closeOnEscape=e=>e.key==='Escape'&&setMenu(false);window.addEventListener('keydown',closeOnEscape);return()=>window.removeEventListener('keydown',closeOnEscape)},[menu]);
   const links=[['Residences','/#residences'],['Corporate stays','/corporate-accommodation-nairobi/'],['The experience','/#experience'],['About','/#about']];
   return <header className={`site-header ${scrolled?'scrolled':''}`}>
     <a className="brand" href="/" aria-label="House of Amelia home"><img className="brand-logo" src="/assets/hoa-logo.png" alt="House of Amelia logo"/><span>HOUSE <i>of</i> AMELIA</span><small>PREMIUM SERVICED ACCOMMODATION</small></a>
-    <nav className={menu?'nav-open':''}>{links.map(([t,h])=><a key={h} href={h} onClick={()=>setMenu(false)}>{t}</a>)}<button className="mobile-enquire" onClick={()=>{setMenu(false);onEnquire()}}>Enquire now <ArrowUpRight size={15}/></button></nav>
+    <nav id="primary-navigation" className={menu?'nav-open':''}>{links.map(([t,h])=><a key={h} href={h} onClick={()=>setMenu(false)}>{t}</a>)}<button className="mobile-enquire" onClick={()=>{setMenu(false);onEnquire()}}>Enquire now <ArrowUpRight size={15}/></button></nav>
     <button className="header-cta" onClick={onEnquire}>Enquire now <ArrowUpRight size={15}/></button>
-    <button className="menu-toggle" aria-label="Toggle navigation" onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button>
+    <button className="menu-toggle" aria-label={menu?'Close navigation':'Open navigation'} aria-expanded={menu} aria-controls="primary-navigation" onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button>
   </header>
 }
 
