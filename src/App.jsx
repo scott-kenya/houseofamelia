@@ -28,7 +28,7 @@ const residences = [
     type: '3-bedroom executive residence',
     nightlyRate: 250,
     audience: 'Executives, families & corporate stays',
-    image: '/assets/images/bedroom2.webp',
+    image: '/assets/images/marquis.webp',
     description: 'A private residence for guests seeking the ease and comfort of a furnished home for a short visit or extended stay.',
     features: ['Swimming pool', 'Dedicated office / workspace', 'Wi-Fi', 'Smart TV', 'Washer and dryer', 'Smoke & carbon monoxide detectors', 'Housekeeping', 'Utilities', 'Corporate invoicing'],
     stay: 'Nightly and monthly stays',
