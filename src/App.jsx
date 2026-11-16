@@ -41,7 +41,7 @@ const residences = [
     type: 'Coastal holiday residence',
     nightlyRate: 120,
     audience: 'Leisure, business & extended stays',
-    image: '/assets/images/marquis.webp',
+    image: '/assets/images/Coastal Living Room Retreat.webp',
     description: 'A relaxed coastal residence in Nyali, just a 2-minute walk from the beach, with air conditioning for comfortable family holidays, business visits and extended stays.',
     features: ['Swimming pool', '2-minute walk to the beach', 'Air conditioning', 'Wi-Fi', 'Smart TV', 'Smoke & carbon monoxide detectors', 'Housekeeping', 'Utilities', 'Airport transfers on request'],
     stay: 'Nightly and monthly stays',
