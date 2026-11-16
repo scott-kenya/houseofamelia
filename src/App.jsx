@@ -331,7 +331,7 @@ export default function App() {
       </section>
 
       <section className="corporate" id="corporate">
-        <div className="corporate-image"><img src="/assets/images/sittingroom.webp" alt="Comfortable furnished apartment living area" loading="lazy"/><div className="image-caption">YOUR OWN SPACE. OUR THOUGHTFUL SUPPORT.</div></div>
+        <div className="corporate-image"><img src="/assets/images/corporate-accommodation.svg" alt="Comfortable furnished apartment living area" loading="lazy"/><div className="image-caption">YOUR OWN SPACE. OUR THOUGHTFUL SUPPORT.</div></div>
         <div className="corporate-copy"><span className="eyebrow">FOR BUSINESS & RELOCATION</span><h2>Make room for<br/><em>what matters.</em></h2><p>Accommodation should be the easiest part of a work assignment or relocation. We support organisations and individuals with furnished residences and practical services for stays from one month to a year and beyond.</p>
           <div className="corporate-points"><div><Building2/><span><b>Corporate accommodation</b><small>Practical stays for teams, consultants and visiting executives.</small></span></div><div><Globe2/><span><b>Relocation & expatriate stays</b><small>A comfortable landing place while you make Kenya home.</small></span></div><div><CalendarDays/><span><b>Flexible durations</b><small>Nightly, monthly and longer-term arrangements.</small></span></div></div>
           <button className="button button-dark" onClick={()=>enquire()}>Discuss corporate accommodation <ArrowUpRight size={17}/></button>
