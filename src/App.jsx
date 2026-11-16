@@ -137,9 +137,9 @@ function Header({onEnquire}) {
   const links=[['Residences','/#residences'],['Corporate stays','/corporate-accommodation-nairobi/'],['The experience','/#experience'],['About','/#about']];
   return <header className={`site-header ${scrolled?'scrolled':''}`}>
     <a className="brand" href="/" aria-label="House of Amelia home"><img className="brand-logo" src="/assets/hoa-logo.png" alt="House of Amelia logo"/><span>HOUSE <i>of</i> AMELIA</span><small>PREMIUM SERVICED ACCOMMODATION</small></a>
-    <nav id="primary-navigation" className={menu?'nav-open':''}>{links.map(([t,h])=><a key={h} href={h} onClick={()=>setMenu(false)}>{t}</a>)}<button className="mobile-enquire" onClick={()=>{setMenu(false);onEnquire()}}>Enquire now <ArrowUpRight size={15}/></button></nav>
+    <nav aria-label="Primary navigation" id="primary-navigation" className={menu?'nav-open':''}>{links.map(([t,h])=><a key={h} href={h} onClick={()=>setMenu(false)}>{t}</a>)}<button className="mobile-enquire" onClick={()=>{setMenu(false);onEnquire()}}>Enquire now <ArrowUpRight size={15}/></button></nav>
     <button className="header-cta" onClick={onEnquire}>Enquire now <ArrowUpRight size={15}/></button>
-    <button className="menu-toggle" aria-label={menu?'Close navigation':'Open navigation'} aria-expanded={menu} aria-controls="primary-navigation" onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button>
+    <button type="button" className="menu-toggle" aria-label={menu?'Close navigation':'Open navigation'} aria-expanded={menu} aria-controls="primary-navigation" onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button>
   </header>
 }
 
