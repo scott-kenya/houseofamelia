@@ -265,7 +265,7 @@ const residencePages = {
   '/residences/the-marquis/': {
     id:'marquis-3br', title:'The Marquis by House of Amelia', subtitle:'Executive living with a dedicated workspace.', location:'Kileleshwa / Riverside, Nairobi', rate:250,
     intro:'A spacious three-bedroom executive residence designed for guests who value privacy, room to settle in and a dedicated office or workspace for working while in Nairobi.',
-    images:[['/assets/images/marquis.webp','Living area'],['/assets/images/Pool.webp','Swimming pool'],['/assets/images/Golf.webp','Rooftop garden'],['/assets/images/Playground.webp','Children’s playground'],['/assets/images/Games Lounge.webp','Games room'],['/assets/images/Gym.webp','Fitness centre'],['/assets/images/movietheatre.webp','Private cinema']],
+    images:[['/assets/images/marquis.webp','Living area'],['/assets/images/Pool.webp','Swimming pool'],['/assets/images/Golf.webp','Rooftop garden'],['/assets/images/Playground.webp','Children’s playground'],['/assets/images/Games%20Lounge.webp','Games room'],['/assets/images/Gym.webp','Fitness centre'],['/assets/images/movietheatre.webp','Private cinema']],
     features:['Three-bedroom executive residence','Dedicated office / workspace','Swimming pool access','Wi-Fi and Smart TV','Washer and dryer','Housekeeping, utilities and corporate invoicing'],
     note:'Monthly and corporate rates are available on request. Confirm exact inclusions and availability for your dates.'
   },
