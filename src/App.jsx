@@ -299,7 +299,7 @@ export default function App() {
     <Header onEnquire={()=>enquire()}/>
     <main>
       <section className="hero">
-        <img className="hero-image" src="/assets/images/hero-living.webp" alt="Elegant furnished residence interior"/>
+        <img className="hero-image" src="/assets/images/marquis.webp" alt="Elegant furnished residence interior"/>
         <div className="hero-shade"/>
         <div className="hero-content">
           <span className="hero-kicker"><span/> A MORE CONSIDERED WAY TO STAY IN KENYA</span>
