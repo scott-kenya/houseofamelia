@@ -272,7 +272,7 @@ const residencePages = {
   '/residences/house-of-amelia-nyali/': {
     id:'nyali-house', title:'House of Amelia Nyali', subtitle:'A coastal stay, just a two-minute walk from the beach.', location:'Nyali, Mombasa', rate:120,
     intro:'A furnished coastal residence for family holidays, business visits and longer stays in Mombasa. Enjoy the convenience of being just a two-minute walk from the beach.',
-    images:[['/assets/images/Coastal-Living-Room-Retreat.webp,'Balcony'],['/assets/images/bedroom.jpg','Bedroom'],['/assets/images/kitchen.jpg','Kitchen'],['/assets/images/pool.jpg','Swimming pool'],['/assets/images/journal-nyali.jpg','Nyali coastline']],
+    images:[['/assets/images/Coastal Living Room Retreat.webp,'Balcony'],['/assets/images/bedroom.jpg','Bedroom'],['/assets/images/kitchen.jpg','Kitchen'],['/assets/images/pool.jpg','Swimming pool'],['/assets/images/journal-nyali.jpg','Nyali coastline']],
     features:['Just a two-minute walk to the beach','Swimming pool access','Air conditioning','Wi-Fi and Smart TV','Smoke and carbon monoxide detectors','Housekeeping, utilities and airport transfers on request'],
     note:'Monthly and longer-stay rates are available on request. Confirm exact inclusions and availability for your dates.'
   }
