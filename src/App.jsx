@@ -274,9 +274,9 @@ const residencePages = {
     intro:'A furnished coastal residence for family holidays, business visits and longer stays in Mombasa. Enjoy the convenience of being just a two-minute walk from the beach.',
     images: [
   ['/assets/images/Coastal Living Room Retreat.webp', 'Balcony'],
-  ['/assets/images/bedroom.jpg', 'Bedroom'],
-  ['/assets/images/kitchen.jpg', 'Kitchen'],
-  ['/assets/images/pool.jpg', 'Swimming pool'],
+  ['/assets/images/Tropical Accents.webp', 'Bedroom'],
+  ['/assets/images/Living Roome.webp', 'Kitchen'],
+  ['/assets/images/Warm Shelves.webp', 'Swimming pool'],
   ['/assets/images/journal-nyali.jpg', 'Nyali coastline']
 ],
     features:['Just a two-minute walk to the beach','Swimming pool access','Air conditioning','Wi-Fi and Smart TV','Smoke and carbon monoxide detectors','Housekeeping, utilities and airport transfers on request'],
