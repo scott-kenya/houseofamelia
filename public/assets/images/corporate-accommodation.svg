@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Elegant serviced apartment living and dining space">
+<defs>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#f6eee2"/><stop offset="1" stop-color="#dfd2bf"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#b69a79"/><stop offset="1" stop-color="#80684f"/></linearGradient>
+ <linearGradient id="sofa" x2="0" y2="1"><stop stop-color="#b9a18a"/><stop offset="1" stop-color="#796754"/></linearGradient>
+ <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#dce8e4"/><stop offset="1" stop-color="#8ca99f"/></linearGradient>
+ <linearGradient id="gold" x2="0" y2="1"><stop stop-color="#e6c98b"/><stop offset="1" stop-color="#9c7540"/></linearGradient>
+ <filter id="shadow"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1200" height="900" fill="url(#wall)"/>
+<path d="M0 0H1200V115L0 205Z" fill="#f9f5ed"/>
+<path d="M0 690L1200 610V900H0Z" fill="url(#floor)"/>
+<rect x="85" y="160" width="420" height="430" rx="4" fill="#3d514a"/>
+<rect x="103" y="178" width="384" height="394" fill="url(#glass)"/>
+<path d="M295 178V572M103 370H487" stroke="#344a43" stroke-width="12"/>
+<path d="M103 490H487" stroke="#fff" stroke-opacity=".25" stroke-width="4"/>
+<g fill="#5d806a" opacity=".8"><circle cx="155" cy="400" r="70"/><circle cx="220" cy="350" r="80"/><circle cx="420" cy="410" r="92"/><circle cx="350" cy="330" r="62"/></g>
+<path d="M70 145V610M515 145V610" stroke="#b79b79" stroke-width="12"/>
+<path d="M55 150Q295 90 530 150" fill="none" stroke="#eee2d0" stroke-width="24"/>
+<path d="M530 120H1150V610H530Z" fill="#eee5d8"/>
+<rect x="780" y="230" width="270" height="190" fill="#bca98f"/>
+<rect x="794" y="244" width="242" height="162" fill="#e4d8c6"/>
+<path d="M815 380L880 290L930 350L980 275L1020 380Z" fill="#819184"/>
+<rect x="845" y="450" width="280" height="18" rx="8" fill="#755d46"/>
+<path d="M875 468V620M1090 468V620" stroke="#755d46" stroke-width="14"/>
+<g fill="#f5eee3"><rect x="870" y="420" width="55" height="30" rx="4"/><rect x="950" y="412" width="65" height="38" rx="4"/></g>
+<ellipse cx="610" cy="740" rx="440" ry="50" fill="#392f25" opacity=".22" filter="url(#shadow)"/>
+<path d="M160 550Q170 490 245 490H690Q780 500 800 580L820 750H135Z" fill="url(#sofa)"/>
+<path d="M165 570Q165 515 235 515H690Q755 520 770 580V680H165Z" fill="#b7a18a"/>
+<path d="M185 570V690M370 540V690M560 540V690M745 570V690" stroke="#806e5a" stroke-width="8"/>
+<path d="M250 535L340 525L365 640L260 650Z" fill="#e8e0d3"/>
+<path d="M420 525L520 525L535 640L430 640Z" fill="#284b40"/>
+<path d="M580 535L675 535L700 645L595 650Z" fill="#e5d8c4"/>
+<path d="M135 680H815L850 735H105L135 680Z" fill="#6d5946"/>
+<path d="M145 735V810M810 735V810" stroke="#4d3d2f" stroke-width="18"/>
+<path d="M365 730L820 710L1000 805L540 850Z" fill="#e7dfd1"/>
+<path d="M370 742L820 724L960 798L530 830Z" fill="#b7a58e"/>
+<ellipse cx="610" cy="705" rx="150" ry="42" fill="#f4eee5" stroke="#9e8057" stroke-width="8"/>
+<path d="M500 710L475 840M720 710L750 830" stroke="#9d7c50" stroke-width="10"/>
+<g stroke="url(#gold)" fill="none" stroke-width="9"><path d="M700 0V95M610 95H790M630 95Q700 170 770 95"/><circle cx="700" cy="95" r="55"/><circle cx="700" cy="95" r="34"/></g>
+<g fill="#e6c98b"><circle cx="700" cy="95" r="10"/><circle cx="630" cy="95" r="7"/><circle cx="770" cy="95" r="7"/></g>
+<g><path d="M40 610Q70 530 100 480Q95 560 130 610Q105 560 65 610Z" fill="#4f7259"/><path d="M45 615Q70 535 60 485Q105 550 95 615Z" fill="#6d8b68"/><rect x="52" y="610" width="75" height="100" rx="12" fill="#d5c5ae"/></g>
+<g fill="#fff" opacity=".65"><circle cx="160" cy="220" r="3"/><circle cx="220" cy="280" r="2"/><circle cx="440" cy="230" r="3"/></g>
+</svg>
