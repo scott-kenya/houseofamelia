@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender-seo.mjs",
+    "build": "vite build && node scripts/prerender-seo.mjs && npm run seo:check",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seo:check": "node scripts/check-seo-output.mjs"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
