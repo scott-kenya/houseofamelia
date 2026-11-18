@@ -310,7 +310,38 @@ const residencePages = {
 };
 
 function ResidenceDetailPage({page,onEnquire}) {
-  useEffect(()=>{document.title=`${page.title} | House of Amelia`;const desc=`Explore ${page.title} in ${page.location}. Furnished accommodation with tailored monthly and extended-stay quotations available on request.`;let meta=document.querySelector('meta[name="description"]');if(meta)meta.content=desc;let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href=`https://www.houseofamelia.co.ke${window.location.pathname}`;},[page]);
+  useEffect(()=>{
+    const base='https://www.houseofamelia.co.ke';
+    const url=base+window.location.pathname;
+    const title=page.title+' | Furnished Extended-Stay Residence | House of Amelia';
+    const desc='Explore '+page.title+' in '+page.location+'. '+page.intro+' Monthly and extended-stay quotations available on request.';
+    document.title=title;
+    const setMeta=(selector,attribute,value)=>{
+      let node=document.head.querySelector(selector);
+      if(!node){node=document.createElement('meta');const parts=selector.match(/\[(name|property)=["']([^"']+)["']\]/);if(parts)node.setAttribute(parts[1],parts[2]);document.head.appendChild(node);}
+      node.setAttribute('content',value);
+    };
+    setMeta('meta[name="description"]','name',desc);
+    setMeta('meta[property="og:type"]','property','website');
+    setMeta('meta[property="og:title"]','property',title);
+    setMeta('meta[property="og:description"]','property',desc);
+    setMeta('meta[property="og:url"]','property',url);
+    setMeta('meta[property="og:image"]','property',base+page.images[0][0]);
+    setMeta('meta[name="twitter:card"]','name','summary_large_image');
+    setMeta('meta[name="twitter:title"]','name',title);
+    setMeta('meta[name="twitter:description"]','name',desc);
+    const canonical=document.head.querySelector('link[rel="canonical"]');
+    if(canonical)canonical.href=url;
+    const locality=page.location.includes('Mombasa')?'Mombasa':'Nairobi';
+    const schema=[
+      {'@context':'https://schema.org','@type':'LodgingBusiness','name':page.title,'description':desc,'url':url,'image':page.images.map(item=>base+item[0]),'telephone':'+254112415949','address':{'@type':'PostalAddress','addressLocality':locality,'addressCountry':'KE'},'amenityFeature':page.features.map(name=>({'@type':'LocationFeatureSpecification','name':name,'value':true}))},
+      {'@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':1,'name':'Home','item':base+'/'},{'@type':'ListItem','position':2,'name':'Residences','item':base+'/#residences'},{'@type':'ListItem','position':3,'name':page.title,'item':url}]}
+    ];
+    let script=document.getElementById('residence-page-schema');
+    if(!script){script=document.createElement('script');script.id='residence-page-schema';script.type='application/ld+json';document.head.appendChild(script);}
+    script.textContent=JSON.stringify(schema);
+    return ()=>{const node=document.getElementById('residence-page-schema');if(node)node.remove();};
+  },[page]);
   return <div id="top"><Header onEnquire={()=>onEnquire(page.id)}/><main className="residence-detail">
     <section className="detail-hero"><div><span className="eyebrow">HOUSE OF AMELIA RESIDENCE COLLECTION</span><span className="location"><MapPin size={14}/>{page.location}</span><h1>{page.title}</h1><p>{page.subtitle}</p><div className="detail-price"><span>Monthly & extended-stay rates</span><strong>Quotation on request</strong><small>Tailored to your dates, occupancy and length of stay</small></div><button className="button button-gold" onClick={()=>onEnquire(page.id)}>Enquire about this residence <ArrowUpRight size={16}/></button></div><img src={page.images[0][0]} alt={`${page.title} – ${page.images[0][1]}`}/></section>
     <section className="detail-gallery section-pad"><div className="section-heading"><div><span className="eyebrow">A CLOSER LOOK</span><h2>Explore the <em>residence.</em></h2></div><p>We are committed to ensuring your stay is comfortable and meets all of your needs.</p></div><div className="detail-gallery-grid">{page.images.filter(item=>Array.isArray(item)&&typeof item[0]==="string"&&item[0].trim()).map(([src,label])=><figure key={src}><img src={src} alt={`${page.title} – ${label||"Residence photograph"}`} loading="lazy"/></figure>)}</div></section>
