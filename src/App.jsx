@@ -126,6 +126,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
   useEffect(() => {
     if (open) {
       setEnquiryType(corporateMode ? 'corporate' : 'individual');
+      setPurpose(corporateMode ? 'Corporate assignment' : 'Relocation / expatriate stay');
       setPrivacyConsent(false);
     }
   }, [corporateMode, open]);
@@ -223,7 +224,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
         campaign_term: attribution.term || undefined
       });
     }
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg.join('\\n'))}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg.join('\n'))}`, '_blank', 'noopener,noreferrer');
     if (ENQUIRY_ENDPOINT) {
       fetch(ENQUIRY_ENDPOINT, {
         method: 'POST',
@@ -261,7 +262,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
         </div>
         <div className="form-grid">
           <label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@company.com"/></label>
-          <label>{isCorporate ? "Company / organisation" : "Company (optional)"}<input value={company} onChange={e=>setCompany(e.target.value)} placeholder="Organisation" required={corporateMode}/></label>
+          <label>{isCorporate ? "Company / organisation" : "Company (optional)"}<input value={company} onChange={e=>setCompany(e.target.value)} placeholder="Organisation" required={isCorporate}/></label>
         </div>
         {isCorporate && <div className="form-grid">
           <label>Contact phone<input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+254…"/></label>
