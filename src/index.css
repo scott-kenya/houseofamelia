@@ -225,3 +225,12 @@
 .analytics-consent-actions button:hover,.analytics-preferences:hover{border-color:#9b8053}
 .analytics-preferences{position:fixed;z-index:1190;left:18px;bottom:18px;background:#fff;box-shadow:0 5px 22px #102a2220;font-size:10px;padding:9px 12px}
 @media(max-width:700px){.analytics-consent{left:12px;right:12px;bottom:12px;display:block;padding:18px}.analytics-consent-actions{margin-top:14px;display:grid;grid-template-columns:1fr 1fr}.analytics-consent-actions button{padding:12px 8px}.analytics-preferences{left:12px;bottom:12px}}
+
+
+/* Dual-audience enquiry form */
+.enquiry-audience{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 18px;padding:5px;background:#eeeee7;border:1px solid #e1dfd5}
+.enquiry-audience button{padding:12px 10px;border:1px solid transparent;background:transparent;color:#526158;font:500 11px Inter,Arial,sans-serif;cursor:pointer}
+.enquiry-audience button.active{background:#fff;border-color:#d7d3c8;color:#29453a;box-shadow:0 2px 8px #102a2210}
+.enquiry-consent{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px!important;font-size:11px!important;line-height:1.65;color:#68736a}
+.enquiry-consent input{width:15px;height:15px;flex:0 0 15px;margin:2px 0 0;accent-color:#173c36}
+.enquiry-consent a{color:#806a42;text-decoration:underline;text-underline-offset:3px}
