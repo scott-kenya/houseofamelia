@@ -13,7 +13,6 @@ const residences = [
     name: 'Gemland Executive Residence',
     location: 'Kileleshwa, Nairobi',
     type: '2-bedroom apartment',
-    nightlyRate: 90,
     audience: 'Executive & extended stays',
     image: '/assets/images/living.webp',
     description: 'A considered, fully furnished base for professionals, relocating guests and longer assignments in Nairobi.',
@@ -26,7 +25,6 @@ const residences = [
     name: 'The Marquis by House of Amelia',
     location: 'Nairobi, Kenya',
     type: '3-bedroom executive residence',
-    nightlyRate: 250,
     audience: 'Executives, families & corporate stays',
     image: '/assets/images/marquis.webp',
     description: 'A private residence for guests seeking the ease and comfort of a furnished home for a short visit or extended stay.',
@@ -39,7 +37,6 @@ const residences = [
     name: 'House of Amelia Nyali',
     location: 'Nyali, Mombasa',
     type: 'Coastal holiday residence',
-    nightlyRate: 120,
     audience: 'Leisure, business & extended stays',
     image: '/assets/images/Coastal Living Room Retreat.webp',
     description: 'A relaxed coastal residence in Nyali, just a 2-minute walk from the beach, with air conditioning for comfortable family holidays, business visits and extended stays.',
@@ -328,9 +325,9 @@ export default function App() {
         <div className="section-heading"><div><span className="eyebrow">THE RESIDENCE COLLECTION</span><h2>Find your place<br/><em>in Kenya.</em></h2></div><p>Distinctive homes in two sought-after destinations, each designed to make everyday living feel considered and comfortable.</p></div>
         <div className="residence-grid">{residences.map((r,i)=><article className={`residence-card ${i===0?'featured':''}`} key={r.id}>
           <div className="residence-photo"><img src={r.image} alt={`Furnished residence interior for ${r.name}`} loading="lazy"/><span className="photo-tag">HOUSE OF AMELIA · {r.tag}</span></div>
-          <div className="residence-info"><div className="location"><MapPin size={14}/>{r.location}</div><h3>{r.name}</h3><div className="residence-type">{r.type}</div><p>{r.description}</p><div className="feature-list">{r.features.map(f=><span key={f}><Check size={13}/>{f}</span>)}</div><div className="rate-row"><div><small>INDICATIVE · PER NIGHT</small><strong>US$ {r.nightlyRate}</strong><span className="monthly-note">Monthly and 6+ month rates on request</span></div><button className="arrow-button" onClick={()=>enquire(r.id)} aria-label={`Enquire about ${r.name}`}><ArrowUpRight/></button></div><div className="residence-card-actions"><a className="text-link card-link" href={`/residences/${r.id === 'gemland-2br' ? 'gemland-executive-residence' : r.id === 'marquis-3br' ? 'the-marquis' : 'house-of-amelia-nyali'}/`}>View residence <ArrowRight size={15}/></a><button className="text-link card-link" onClick={()=>enquire(r.id)}>Enquire now <ArrowUpRight size={15}/></button></div></div>
+          <div className="residence-info"><div className="location"><MapPin size={14}/>{r.location}</div><h3>{r.name}</h3><div className="residence-type">{r.type}</div><p>{r.description}</p><div className="feature-list">{r.features.map(f=><span key={f}><Check size={13}/>{f}</span>)}</div><div className="rate-row"><div><small>MONTHLY & EXTENDED-STAY RATES</small><strong>Quotation on request</strong><span className="monthly-note">Tailored rates for 1–12 months and longer</span></div></div><div className="residence-card-actions"><a className="text-link card-link" href={`/residences/${r.id === 'gemland-2br' ? 'gemland-executive-residence' : r.id === 'marquis-3br' ? 'the-marquis' : 'house-of-amelia-nyali'}/`}>View residence <ArrowRight size={15}/></a><button className="text-link card-link" onClick={()=>enquire(r.id)}>Enquire now <ArrowUpRight size={15}/></button></div></div>
         </article>)}</div>
-        <p className="rate-disclaimer">Displayed nightly rates are indicative starting rates in US dollars. Final rates depend on dates, occupancy and length of stay. Monthly and corporate rates are available on request.</p>
+        <p className="rate-disclaimer">Every quotation is tailored to the residence, dates, occupancy and length of stay. Corporate and extended-stay arrangements are available on request.</p>
       </section>
 
       <section className="corporate" id="corporate">
