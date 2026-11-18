@@ -194,3 +194,20 @@
     height: 42px;
   }
 }
+
+
+/* Corporate accommodation landing page */
+.corporate-enquiry{display:grid;grid-template-columns:.9fr 1.1fr;gap:7%;align-items:center;background:#eeeee7}
+.corporate-enquiry-heading h2{font:400 clamp(38px,4.5vw,56px)/1.12 'Playfair Display',serif;margin:18px 0}
+.corporate-enquiry-heading h2 em{color:#9b8053}
+.corporate-enquiry-heading>p{max-width:440px;color:#68736a;font-size:13px;line-height:1.9;margin:0 0 24px}
+.corporate-enquiry-details{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.corporate-enquiry-details article{background:#fff;padding:25px;border:1px solid #e1dfd5;min-height:190px}
+.corporate-enquiry-details article:last-child{grid-column:1/-1;min-height:0}
+.corporate-enquiry-details svg{width:23px;height:23px;color:#9b8053;stroke-width:1.5}
+.corporate-enquiry-details h3{font:400 21px 'Playfair Display',serif;margin:16px 0 8px;color:#29453a}
+.corporate-enquiry-details p{font-size:12px;line-height:1.8;color:#68736a;margin:0}
+.seo-nightly-rate{display:flex;flex-direction:column;gap:4px;border-top:1px solid #e5e2d9;padding-top:12px}
+.seo-nightly-rate strong{font:400 18px 'Playfair Display',serif;color:#29453a}
+.seo-nightly-rate span{font-size:10px;color:#858980}
+@media(max-width:800px){.corporate-enquiry{grid-template-columns:1fr;gap:35px}.corporate-enquiry-details{grid-template-columns:1fr}.corporate-enquiry-details article,.corporate-enquiry-details article:last-child{grid-column:auto;min-height:0}}
