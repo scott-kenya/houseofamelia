@@ -103,7 +103,28 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
       ...(corporateMode ? [`Contact phone: ${phone || 'Not provided'}`, `Rooms required: ${rooms}`, `Corporate billing: ${billing}`] : []),
       `Requirements: ${notes || 'Not specified'}`
     ].join('\n');
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    const campaign = new URLSearchParams(window.location.search);
+    const leadSource = campaign.get('utm_source') || document.referrer || 'Direct / unknown';
+    const attribution = [
+      `Landing page: ${window.location.origin}${window.location.pathname}`,
+      `Lead source: ${leadSource}`,
+      ...(campaign.get('utm_medium') ? [`Campaign medium: ${campaign.get('utm_medium')}`] : []),
+      ...(campaign.get('utm_campaign') ? [`Campaign: ${campaign.get('utm_campaign')}`] : []),
+      ...(campaign.get('utm_content') ? [`Campaign content: ${campaign.get('utm_content')}`] : []),
+      ...(campaign.get('utm_term') ? [`Campaign term: ${campaign.get('utm_term')}`] : [])
+    ];
+    msg.push(...attribution);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: corporateMode ? 'corporate_quote_request' : 'accommodation_enquiry',
+      residence: property,
+      stay_duration: duration,
+      purpose,
+      rooms_required: corporateMode ? rooms : '1',
+      lead_source: leadSource,
+      campaign: campaign.get('utm_campaign') || undefined
+    });
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg.join('\n'))}`, '_blank', 'noopener,noreferrer');
   };
   return <div className="modal-backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose()}>
     <div ref={dialogRef} className="enquiry-modal" role="dialog" aria-modal="true" aria-labelledby="enquiry-title" tabIndex={-1}>
