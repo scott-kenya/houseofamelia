@@ -46,7 +46,7 @@ const residences = [
   }
 ];
 
-function EnquiryModal({ open, onClose, selected }) {
+function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
   const [property, setProperty] = useState(selected || 'gemland-2br');
   const [duration, setDuration] = useState('6–12 months');
   const [purpose, setPurpose] = useState('Relocation / expatriate stay');
@@ -55,6 +55,9 @@ function EnquiryModal({ open, onClose, selected }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [phone, setPhone] = useState('');
+  const [rooms, setRooms] = useState('1');
+  const [billing, setBilling] = useState('To be discussed');
   const [notes, setNotes] = useState('');
   useEffect(() => { if (selected) setProperty(selected); }, [selected]);
   const dialogRef = useRef(null);
@@ -88,7 +91,7 @@ function EnquiryModal({ open, onClose, selected }) {
   const submit = e => {
     e.preventDefault();
     const msg = [
-      'Hello House of Amelia, I would like to enquire about accommodation.',
+      corporateMode ? 'Hello House of Amelia, I would like to request a corporate accommodation quotation.' : 'Hello House of Amelia, I would like to enquire about accommodation.',
       `Residence: ${chosen?.name || property}`,
       `Preferred arrival: ${arrival || 'Flexible'}`,
       `Purpose of stay: ${purpose}`,
@@ -96,7 +99,8 @@ function EnquiryModal({ open, onClose, selected }) {
       `Guests: ${guests}`,
       `Name: ${name}`,
       `Email: ${email}`,
-      `Company: ${company || 'Individual booking'}`,
+      `Company / organisation: ${company || 'Individual booking'}`,
+      ...(corporateMode ? [`Contact phone: ${phone || 'Not provided'}`, `Rooms required: ${rooms}`, `Corporate billing: ${billing}`] : []),
       `Requirements: ${notes || 'Not specified'}`
     ].join('\n');
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
@@ -104,26 +108,31 @@ function EnquiryModal({ open, onClose, selected }) {
   return <div className="modal-backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose()}>
     <div ref={dialogRef} className="enquiry-modal" role="dialog" aria-modal="true" aria-labelledby="enquiry-title" tabIndex={-1}>
       <button className="modal-close" onClick={onClose} aria-label="Close enquiry"><X/></button>
-      <span className="eyebrow">Start a conversation</span>
-      <h2 id="enquiry-title">Tell us about your stay.</h2>
-      <p className="muted">Share a few details and our team will help with availability and a tailored rate.</p>
+      <span className="eyebrow">{corporateMode ? 'CORPORATE ACCOMMODATION' : 'Start a conversation'}</span>
+      <h2 id="enquiry-title">{corporateMode ? 'Arrange accommodation for your team.' : 'Tell us about your stay.'}</h2>
+      <p className="muted">{corporateMode ? 'Share your organisation’s requirements and we will prepare a tailored corporate quotation.' : 'Share a few details and our team will help with availability and a tailored rate.'}</p>
       <form onSubmit={submit}>
-        <label>Preferred residence<select value={property} onChange={e=>setProperty(e.target.value)}>{residences.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
-        <label>Purpose of stay<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option>Corporate assignment</option><option>Relocation / expatriate stay</option><option>Remote work / digital nomad</option><option>Family / personal stay</option><option>Leisure / holiday</option><option>Other</option></select></label>
+        <label>{corporateMode ? "Preferred residence / location" : "Preferred residence"}<select value={property} onChange={e=>setProperty(e.target.value)}>{residences.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
+        <label>{corporateMode ? "Purpose of assignment" : "Purpose of stay"}<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option>Corporate assignment</option><option>Relocation / expatriate stay</option><option>Remote work / digital nomad</option><option>Family / personal stay</option><option>Leisure / holiday</option><option>Other</option></select></label>
         <div className="form-grid">
           <label>Arrival date<input type="date" min={localToday} value={arrival} onChange={e=>setArrival(e.target.value)}/></label>
           <label>Expected stay<select value={duration} onChange={e=>setDuration(e.target.value)}><option>1–3 nights</option><option>4–7 nights</option><option>1–4 weeks</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12 months or more</option><option>Flexible / not sure</option></select></label>
         </div>
         <div className="form-grid">
-          <label>Number of guests<select value={guests} onChange={e=>setGuests(e.target.value)}>{[1,2,3,4,5,6,7,8].map(n=><option key={n}>{n}</option>)}</select></label>
+          <label>{corporateMode ? "Employees / occupants" : "Number of guests"}<select value={guests} onChange={e=>setGuests(e.target.value)}>{[1,2,3,4,5,6,7,8].map(n=><option key={n}>{n}</option>)}</select></label>
           <label>Your name<input required value={name} onChange={e=>setName(e.target.value)} placeholder="Full name"/></label>
         </div>
         <div className="form-grid">
           <label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@company.com"/></label>
-          <label>Company (optional)<input value={company} onChange={e=>setCompany(e.target.value)} placeholder="Organisation"/></label>
+          <label>{corporateMode ? "Company / organisation" : "Company (optional)"}<input value={company} onChange={e=>setCompany(e.target.value)} placeholder="Organisation" required={corporateMode}/></label>
         </div>
-        <label>Anything we should know?<textarea rows="3" value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Corporate invoicing, airport transfer, housekeeping needs…"/></label>
-        <button className="button button-dark button-wide" type="submit">Send enquiry via WhatsApp <ArrowUpRight size={17}/></button>
+        {corporateMode && <div className="form-grid">
+          <label>Contact phone<input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+254…"/></label>
+          <label>Number of rooms<select value={rooms} onChange={e=>setRooms(e.target.value)}>{[1,2,3,4,5,6,7,8,9,10].map(n=><option key={n}>{n}</option>)}</select></label>
+          <label>Corporate billing<select value={billing} onChange={e=>setBilling(e.target.value)}><option>To be discussed</option><option>Company invoice required</option><option>Direct payment by employer</option><option>Guest pays; company reimburses</option></select></label>
+        </div>}
+        <label>{corporateMode ? "Assignment details / special requirements" : "Anything we should know?"}<textarea rows="3" value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Dates, room mix, invoicing, airport transfer, housekeeping needs…"/></label>
+        <button className="button button-dark button-wide" type="submit">{corporateMode ? "Request corporate quotation" : "Send enquiry via WhatsApp"} <ArrowUpRight size={17}/></button>
         <p className="form-note">No payment is taken through this form. Rates and availability are confirmed personally.</p>
       </form>
     </div>
@@ -253,7 +262,7 @@ function SeoLandingPage({ page, onEnquire }) {
       {page.sections.map(([heading, body]) => <article className="seo-copy-block" key={heading}><h2>{heading}</h2><p>{body}</p></article>)}
     </section>
     {page.corporate && <section className="corporate-enquiry section-pad">
-      <div className="corporate-enquiry-heading"><span className="eyebrow">FOR HR, PEOPLE & PROJECT TEAMS</span><h2>Make the next placement<br/><em>easier to arrange.</em></h2><p>Send us the essentials and we can discuss the right residence, availability and quotation for your traveller or team.</p><button className="button button-dark" onClick={() => onEnquire()}>Enquire about corporate accommodation <ArrowUpRight size={17}/></button></div>
+      <div className="corporate-enquiry-heading"><span className="eyebrow">FOR HR, PEOPLE & PROJECT TEAMS</span><h2>Make the next placement<br/><em>easier to arrange.</em></h2><p>Send us the essentials and we can discuss the right residence, availability and quotation for your traveller or team.</p><button className="button button-dark" onClick={() => onEnquire(undefined,true)}>Enquire about corporate accommodation <ArrowUpRight size={17}/></button></div>
       <div className="corporate-enquiry-details">
         <article><Building2/><h3>Who we work with</h3><p>Companies, HR teams, NGOs, international organisations, embassies, relocation professionals and project managers.</p></article>
         <article><Users/><h3>Who the stays are for</h3><p>Employees on assignment, consultants, visiting executives, project personnel and relocating staff.</p></article>
@@ -311,12 +320,12 @@ function ResidenceDetailPage({page,onEnquire}) {
 }
 
 export default function App() {
-  const [modal,setModal]=useState(false),[selected,setSelected]=useState(null);
-  const enquire=id=>{setSelected(id||'gemland-2br');setModal(true)};
+  const [modal,setModal]=useState(false),[selected,setSelected]=useState(null),[corporateMode,setCorporateMode]=useState(false);
+  const enquire=(id,corporate=false)=>{setSelected(id||'gemland-2br');setCorporateMode(corporate);setModal(true)};
   const page = seoPages[window.location.pathname];
   const residencePage = residencePages[window.location.pathname];
-  if (residencePage) return <><ResidenceDetailPage page={residencePage} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected}/></>;
-  if (page) return <><SeoLandingPage page={page} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected}/></>;
+  if (residencePage) return <><ResidenceDetailPage page={residencePage} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/></>;
+  if (page) return <><SeoLandingPage page={page} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/></>;
   return <div id="top">
     <Header onEnquire={()=>enquire()}/>
     <main>
@@ -389,6 +398,6 @@ export default function App() {
       </div><div className="footer-bottom"><span>© {new Date().getFullYear()} House of Amelia. All rights reserved.</span><span>NAIROBI · MOMBASA · KENYA</span></div>
     </footer>
     <a className="whatsapp-float" href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hello House of Amelia, I would like to enquire about a stay.')}`} target="_blank" rel="noreferrer" aria-label="Chat with House of Amelia on WhatsApp"><MessageCircle/></a>
-    <EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected}/>
+    <EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/>
   </div>;
 }
