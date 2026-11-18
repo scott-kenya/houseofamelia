@@ -108,7 +108,7 @@ const residences = [
 
 function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
   const [property, setProperty] = useState(selected || 'gemland-2br');
-  const [enquiryType, setEnquiryType] = useState(isCorporate ? 'corporate' : 'individual');
+  const [enquiryType, setEnquiryType] = useState(corporateMode ? 'corporate' : 'individual');
   const isCorporate = enquiryType === 'corporate';
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [duration, setDuration] = useState('6–12 months');
@@ -125,7 +125,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
   useEffect(() => { if (selected) setProperty(selected); }, [selected]);
   useEffect(() => {
     if (open) {
-      setEnquiryType(isCorporate ? 'corporate' : 'individual');
+      setEnquiryType(corporateMode ? 'corporate' : 'individual');
       setPrivacyConsent(false);
     }
   }, [corporateMode, open]);
