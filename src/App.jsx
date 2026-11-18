@@ -102,7 +102,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
       `Company / organisation: ${company || 'Individual booking'}`,
       ...(corporateMode ? [`Contact phone: ${phone || 'Not provided'}`, `Rooms required: ${rooms}`, `Corporate billing: ${billing}`] : []),
       `Requirements: ${notes || 'Not specified'}`
-    ].join('\n');
+    ];
     const campaign = new URLSearchParams(window.location.search);
     const leadSource = campaign.get('utm_source') || document.referrer || 'Direct / unknown';
     const attribution = [
