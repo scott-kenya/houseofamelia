@@ -182,16 +182,24 @@ const seoPages = {
     faqs: [['Are the Kileleshwa apartments fully furnished?', 'Yes. Both Nairobi residences are presented as furnished accommodation with living spaces and practical amenities for everyday stays.'], ['Do the apartments have laundry facilities?', 'Washer and dryer facilities are available at both Gemland Executive Residence and The Marquis.'], ['Can I stay for six months?', 'Longer stays are welcome for enquiry. Share your intended dates and duration to discuss availability and terms.']]
   },
   '/corporate-accommodation-nairobi/': {
-    title: 'Corporate Accommodation in Nairobi | House of Amelia',
-    description: 'Arrange furnished corporate accommodation in Nairobi for employees, consultants, project teams and visiting executives. Nightly, monthly and extended stays.',
-    eyebrow: 'FOR ORGANISATIONS & PEOPLE TEAMS', heading: <>Corporate accommodation in <em>Nairobi.</em></>,
-    intro: 'A relocation, project or business assignment comes with enough moving parts. House of Amelia helps organisations arrange furnished accommodation for employees, consultants, project teams and visiting executives in Nairobi.',
+    title: 'Corporate Accommodation in Nairobi | Furnished Executive Stays | House of Amelia',
+    description: 'Furnished corporate accommodation in Nairobi for employee relocations, consultants, project teams and visiting executives. Request tailored monthly and extended-stay quotations.',
+    eyebrow: 'CORPORATE STAYS · NAIROBI, KENYA', heading: <>A better base for <em>business in Nairobi.</em></>,
+    intro: 'Give employees, consultants and visiting teams a furnished place to live while they work in Nairobi. House of Amelia offers executive residences for project assignments, relocations and extended business stays, with tailored arrangements based on each traveller’s dates and requirements.',
+    corporate: true,
     sections: [
-      ['Accommodation for business travel and assignments', 'Our Nairobi residences offer private furnished living spaces for short business visits and longer assignments. Choose between a two-bedroom apartment at Gemland Executive Residence and the three-bedroom Marquis residence.'],
-      ['Practical support for corporate stays', 'Housekeeping, utilities and Wi-Fi help simplify the stay. Corporate invoicing is available for eligible bookings, with requirements and billing arrangements confirmed during the enquiry process.'],
-      ['A straightforward booking conversation', 'Share the traveller or team requirements, preferred location, arrival date and expected duration. We will respond with availability and a suitable nightly or monthly quotation. We welcome enquiries from companies, NGOs, international organisations, embassies and relocation professionals; this does not imply pre-approved supplier status.']
+      ['Accommodation that works beyond the hotel room', 'Our Nairobi collection includes Gemland Executive Residence, a furnished two-bedroom apartment, and The Marquis by House of Amelia, a three-bedroom executive residence with a dedicated office or workspace. Both offer a private living environment for professionals who need room to work, rest and settle into the city.'],
+      ['A practical option for organisations and people teams', 'We welcome enquiries from HR and people teams, companies, NGOs, international organisations, embassies, relocation professionals and project managers arranging stays for employees or visiting personnel. Share the assignment details and we can discuss the most suitable residence and duration.'],
+      ['Support for a more settled stay', 'The residences include practical features such as Wi-Fi, Smart TV, housekeeping and utilities. Corporate invoicing can be discussed for eligible bookings, with the requirements and billing arrangements confirmed during the enquiry process.'],
+      ['From one assignment to a longer placement', 'Whether you are arranging accommodation for one consultant or several members of a visiting team, tell us the preferred area, number of occupants, arrival date and expected length of stay. We will check availability and prepare a tailored quotation for the proposed arrangement.']
     ],
-    faqs: [['Can a company pay for an employee’s accommodation?', 'Corporate booking and invoicing arrangements can be discussed and confirmed for eligible reservations.'], ['Can you accommodate project teams?', 'Please enquire with the number of guests, room requirements, location preference and expected dates so we can advise on suitable options.'], ['Do you provide long-term corporate accommodation?', 'Yes. Monthly and longer-term arrangements can be discussed for assignments and relocations.']]
+    faqs: [
+      ['Which Nairobi residences can organisations enquire about?', 'The Nairobi collection includes Gemland Executive Residence, a two-bedroom furnished apartment, and The Marquis by House of Amelia, a three-bedroom executive residence with a dedicated office or workspace.'],
+      ['Can a company pay for an employee’s accommodation?', 'Corporate booking and invoicing arrangements can be discussed and confirmed for eligible reservations. Please include your organisation’s billing requirements in the enquiry.'],
+      ['Can you accommodate consultants and project teams?', 'Yes, organisations can enquire for employees, consultants, project teams and visiting executives. Share the number of guests, room requirements, preferred location and dates so we can advise on suitable options.'],
+      ['Are monthly and longer corporate stays available?', 'Monthly and extended-stay arrangements can be discussed around the assignment. Share the expected duration so we can prepare a tailored quotation.'],
+      ['Are you an approved accommodation supplier?', 'Please contact us to discuss your organisation’s requirements and any supplier onboarding process. An enquiry does not mean House of Amelia is already an approved supplier.']
+    ]
   },
   '/long-term-serviced-apartments-nairobi/': {
     title: 'Long-Term Serviced Apartments in Nairobi | House of Amelia',
@@ -244,8 +252,16 @@ function SeoLandingPage({ page, onEnquire }) {
     <section className="seo-content section-pad"><div className="seo-content-intro"><span className="eyebrow">EXECUTIVE LIVING. EXCEPTIONAL STAYS.</span><h2>Find the right space<br/><em>for your next chapter.</em></h2></div>
       {page.sections.map(([heading, body]) => <article className="seo-copy-block" key={heading}><h2>{heading}</h2><p>{body}</p></article>)}
     </section>
+    {page.corporate && <section className="corporate-enquiry section-pad">
+      <div className="corporate-enquiry-heading"><span className="eyebrow">FOR HR, PEOPLE & PROJECT TEAMS</span><h2>Make the next placement<br/><em>easier to arrange.</em></h2><p>Send us the essentials and we can discuss the right residence, availability and quotation for your traveller or team.</p><button className="button button-dark" onClick={() => onEnquire()}>Enquire about corporate accommodation <ArrowUpRight size={17}/></button></div>
+      <div className="corporate-enquiry-details">
+        <article><Building2/><h3>Who we work with</h3><p>Companies, HR teams, NGOs, international organisations, embassies, relocation professionals and project managers.</p></article>
+        <article><Users/><h3>Who the stays are for</h3><p>Employees on assignment, consultants, visiting executives, project personnel and relocating staff.</p></article>
+        <article><CalendarDays/><h3>What to include</h3><p>Organisation, preferred location, number of occupants, arrival date, expected duration and any invoicing requirements.</p></article>
+      </div>
+    </section>}
     <section className="seo-properties section-pad"><span className="eyebrow">THE HOUSE OF AMELIA COLLECTION</span><h2>Explore our <em>residences.</em></h2><div className="seo-property-grid">
-      {residences.map(r => <article key={r.id}><img src={r.image} alt={r.name} loading="lazy"/><div><span className="location"><MapPin size={13}/>{r.location}</span><h3>{r.name}</h3><p>{r.description}</p><p className="seo-nightly-rate">From <strong>US$ {r.nightlyRate}</strong> / night <span>· Monthly quotation on request</span></p><button className="text-link" onClick={() => onEnquire(r.id)}>Enquire about this residence <ArrowRight size={14}/></button></div></article>)}
+      {residences.map(r => <article key={r.id}><img src={r.image} alt={r.name} loading="lazy"/><div><span className="location"><MapPin size={13}/>{r.location}</span><h3>{r.name}</h3><p>{r.description}</p><p className="seo-nightly-rate"><strong>Monthly & extended-stay rates</strong><span>Tailored quotation on request</span></p><button className="text-link" onClick={() => onEnquire(r.id)}>Enquire about this residence <ArrowRight size={14}/></button></div></article>)}
     </div></section>
     <section className="seo-related section-pad"><span className="eyebrow">EXPLORE MORE</span><h2>More ways to <em>stay with us.</em></h2><div><a href="/serviced-apartments-nairobi/">Serviced apartments in Nairobi <ArrowUpRight size={14}/></a><a href="/executive-serviced-apartments-nairobi/">Executive serviced apartments <ArrowUpRight size={14}/></a><a href="/furnished-apartments-kileleshwa/">Furnished apartments in Kileleshwa <ArrowUpRight size={14}/></a><a href="/corporate-accommodation-nairobi/">Corporate accommodation <ArrowUpRight size={14}/></a><a href="/long-term-serviced-apartments-nairobi/">Long-term stays in Nairobi <ArrowUpRight size={14}/></a><a href="/serviced-apartments-nyali/">Serviced apartments in Nyali <ArrowUpRight size={14}/></a></div></section>
     <section className="seo-faq section-pad"><span className="eyebrow">GOOD TO KNOW</span><h2>Frequently asked <em>questions.</em></h2>{page.faqs.map(([q,a]) => <details key={q}><summary>{q}<ChevronDown size={17}/></summary><p>{a}</p></details>)}</section>
