@@ -23,6 +23,8 @@ for (const page of pages) {
   let html = base.replace(/<title>.*?<\/title>/, `<title>${page.title}</title>`)
     .replace(/<meta name="description" content="[^"]*"\s*\/>/, `<meta name="description" content="${page.description}" />`)
     .replace(/<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${canonical}" />`)
+    .replace(/<meta property="og:title" content="[^"]*"\s*\/>/, `<meta property="og:title" content="${page.title}" />`)
+    .replace(/<meta property="og:description" content="[^"]*"\s*\/>/, `<meta property="og:description" content="${page.description}" />`)
     .replace('<div id="root"></div>', `<div id="root">${content}</div>`);
   const out = path.join('dist', page.path, 'index.html');
   fs.mkdirSync(path.dirname(out), { recursive: true });
@@ -50,6 +52,9 @@ try {
     const html = base.replace(new RegExp('<title>.*?</title>'), `<title>${page.title}</title>`)
       .replace(new RegExp('<meta name="description" content="[^"]*" */>'), `<meta name="description" content="${page.description}" />`)
       .replace(new RegExp('<link rel="canonical" href="[^"]*" */>'), `<link rel="canonical" href="${canonical}" />`)
+      .replace(new RegExp('<meta property="og:title" content="[^"]*" */>'), `<meta property="og:title" content="${page.title}" />`)
+      .replace(new RegExp('<meta property="og:description" content="[^"]*" */>'), `<meta property="og:description" content="${page.description}" />`)
+      .replace(new RegExp('<meta property="og:image" content="[^"]*" */>'), `<meta property="og:image" content="https://www.houseofamelia.co.ke${page.image}" />`)
       .replace('<div id="root"></div>', `<div id="root" data-react-prerender="true">${content}</div>`);
     const out = path.join('dist', page.path, 'index.html');
     fs.mkdirSync(path.dirname(out), { recursive: true });
