@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 
 const WHATSAPP = '254112415949';
+const ENQUIRY_ENDPOINT = import.meta.env.VITE_ENQUIRY_ENDPOINT || '';
 
 const GA4_MEASUREMENT_ID = 'G-24LLME0GBN';
 
@@ -107,6 +108,9 @@ const residences = [
 
 function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
   const [property, setProperty] = useState(selected || 'gemland-2br');
+  const [enquiryType, setEnquiryType] = useState(isCorporate ? 'corporate' : 'individual');
+  const isCorporate = enquiryType === 'corporate';
+  const [privacyConsent, setPrivacyConsent] = useState(false);
   const [duration, setDuration] = useState('6–12 months');
   const [purpose, setPurpose] = useState('Relocation / expatriate stay');
   const [arrival, setArrival] = useState('');
@@ -119,6 +123,12 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
   const [billing, setBilling] = useState('To be discussed');
   const [notes, setNotes] = useState('');
   useEffect(() => { if (selected) setProperty(selected); }, [selected]);
+  useEffect(() => {
+    if (open) {
+      setEnquiryType(isCorporate ? 'corporate' : 'individual');
+      setPrivacyConsent(false);
+    }
+  }, [corporateMode, open]);
   const dialogRef = useRef(null);
   useEffect(() => {
     if (!open) return;
@@ -149,75 +159,118 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
   const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
   const submit = e => {
     e.preventDefault();
+    const campaign = new URLSearchParams(window.location.search);
+    const attribution = {
+      source: campaign.get('utm_source') || document.referrer || 'Direct / unknown',
+      medium: campaign.get('utm_medium') || '',
+      campaign: campaign.get('utm_campaign') || '',
+      content: campaign.get('utm_content') || '',
+      term: campaign.get('utm_term') || ''
+    };
+    const lead = {
+      schemaVersion: 1,
+      submittedAt: new Date().toISOString(),
+      audience: enquiryType,
+      residenceId: property,
+      residenceName: chosen?.name || property,
+      destination: chosen?.location || 'Nairobi, Kenya',
+      arrivalDate: arrival || 'Flexible',
+      stayDuration: duration,
+      guests: Number(guests),
+      roomsRequired: isCorporate ? Number(rooms) : 1,
+      purpose,
+      contact: { name, email, phone: phone || '', company: company || '' },
+      billingPreference: isCorporate ? billing : '',
+      requirements: notes || '',
+      landingPage: window.location.href.split('?')[0],
+      referrer: document.referrer || '',
+      attribution,
+      privacyConsent
+    };
     const msg = [
-      corporateMode ? 'Hello House of Amelia, I would like to request a corporate accommodation quotation.' : 'Hello House of Amelia, I would like to enquire about accommodation.',
-      `Residence: ${chosen?.name || property}`,
-      `Preferred arrival: ${arrival || 'Flexible'}`,
+      isCorporate ? 'Hello House of Amelia, I would like to request a corporate accommodation quotation.' : 'Hello House of Amelia, I would like to enquire about accommodation.',
+      `Residence: ${lead.residenceName}`,
+      `Destination: ${lead.destination}`,
+      `Preferred arrival: ${lead.arrivalDate}`,
       `Purpose of stay: ${purpose}`,
       `Length of stay: ${duration}`,
-      `Guests: ${guests}`,
+      `Guests / occupants: ${guests}`,
       `Name: ${name}`,
       `Email: ${email}`,
       `Company / organisation: ${company || 'Individual booking'}`,
-      ...(corporateMode ? [`Contact phone: ${phone || 'Not provided'}`, `Rooms required: ${rooms}`, `Corporate billing: ${billing}`] : []),
-      `Requirements: ${notes || 'Not specified'}`
+      ...(isCorporate ? [`Contact phone: ${phone || 'Not provided'}`, `Rooms required: ${rooms}`, `Corporate billing: ${billing}`] : []),
+      `Requirements: ${notes || 'Not specified'}`,
+      `Landing page: ${lead.landingPage}`,
+      `Lead source: ${attribution.source}`,
+      ...(attribution.medium ? [`Campaign medium: ${attribution.medium}`] : []),
+      ...(attribution.campaign ? [`Campaign: ${attribution.campaign}`] : []),
+      ...(attribution.content ? [`Campaign content: ${attribution.content}`] : []),
+      ...(attribution.term ? [`Campaign term: ${attribution.term}`] : [])
     ];
-    const campaign = new URLSearchParams(window.location.search);
-    const leadSource = campaign.get('utm_source') || document.referrer || 'Direct / unknown';
-    const attribution = [
-      `Landing page: ${window.location.origin}${window.location.pathname}`,
-      `Lead source: ${leadSource}`,
-      ...(campaign.get('utm_medium') ? [`Campaign medium: ${campaign.get('utm_medium')}`] : []),
-      ...(campaign.get('utm_campaign') ? [`Campaign: ${campaign.get('utm_campaign')}`] : []),
-      ...(campaign.get('utm_content') ? [`Campaign content: ${campaign.get('utm_content')}`] : []),
-      ...(campaign.get('utm_term') ? [`Campaign term: ${campaign.get('utm_term')}`] : [])
-    ];
-    msg.push(...attribution);
     if (typeof window.gtag === 'function') {
-      window.gtag('event', corporateMode ? 'corporate_quote_request' : 'accommodation_enquiry', {
+      window.gtag('event', isCorporate ? 'corporate_quote_request' : 'accommodation_enquiry', {
         residence: property,
+        destination: lead.destination,
         stay_duration: duration,
         purpose,
-        rooms_required: corporateMode ? rooms : '1',
-        lead_source: leadSource,
-        campaign_source: campaign.get('utm_source') || undefined,
-        campaign_medium: campaign.get('utm_medium') || undefined,
-        campaign_name: campaign.get('utm_campaign') || undefined,
-        campaign_content: campaign.get('utm_content') || undefined,
-        campaign_term: campaign.get('utm_term') || undefined
+        rooms_required: isCorporate ? rooms : '1',
+        lead_source: attribution.source,
+        campaign_source: attribution.source,
+        campaign_medium: attribution.medium || undefined,
+        campaign_name: attribution.campaign || undefined,
+        campaign_content: attribution.content || undefined,
+        campaign_term: attribution.term || undefined
       });
     }
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg.join('\n'))}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg.join('\\n'))}`, '_blank', 'noopener,noreferrer');
+    if (ENQUIRY_ENDPOINT) {
+      fetch(ENQUIRY_ENDPOINT, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead)
+      }).then(response => {
+        if (!response.ok) throw new Error('Enquiry endpoint returned an error');
+      }).catch(error => {
+        console.error('House of Amelia lead-capture delivery failed. WhatsApp remains available.', error);
+      });
+    }
+    onClose();
   };
   return <div className="modal-backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose()}>
     <div ref={dialogRef} className="enquiry-modal" role="dialog" aria-modal="true" aria-labelledby="enquiry-title" tabIndex={-1}>
       <button className="modal-close" onClick={onClose} aria-label="Close enquiry"><X/></button>
-      <span className="eyebrow">{corporateMode ? 'CORPORATE ACCOMMODATION' : 'Start a conversation'}</span>
-      <h2 id="enquiry-title">{corporateMode ? 'Arrange accommodation for your team.' : 'Tell us about your stay.'}</h2>
-      <p className="muted">{corporateMode ? 'Share your organisation’s requirements and we will prepare a tailored corporate quotation.' : 'Share a few details and our team will help with availability and a tailored rate.'}</p>
+      <span className="eyebrow">{isCorporate ? 'CORPORATE ACCOMMODATION' : 'HOUSE OF AMELIA · ENQUIRY'}</span>
+      <h2 id="enquiry-title">{isCorporate ? 'Arrange accommodation for your team.' : 'Tell us about your stay.'}</h2>
+      <p className="muted">{isCorporate ? 'Share your organisation’s requirements and we will prepare a tailored corporate quotation.' : 'Whether you are visiting Nairobi or the coast, share a few details and we will help with availability and a tailored rate.'}</p>
       <form onSubmit={submit}>
-        <label>{corporateMode ? "Preferred residence / location" : "Preferred residence"}<select value={property} onChange={e=>setProperty(e.target.value)}>{residences.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
-        <label>{corporateMode ? "Purpose of assignment" : "Purpose of stay"}<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option>Corporate assignment</option><option>Relocation / expatriate stay</option><option>Remote work / digital nomad</option><option>Family / personal stay</option><option>Leisure / holiday</option><option>Other</option></select></label>
+        <div className="enquiry-audience" role="group" aria-label="Enquiry type">
+          <button type="button" className={isCorporate ? '' : 'active'} aria-pressed={!isCorporate} onClick={() => setEnquiryType('individual')}>Individual stay</button>
+          <button type="button" className={isCorporate ? 'active' : ''} aria-pressed={isCorporate} onClick={() => setEnquiryType('corporate')}>Corporate stay</button>
+        </div>
+        <label>{isCorporate ? "Preferred residence / location" : "Preferred residence"}<select value={property} onChange={e=>setProperty(e.target.value)}>{residences.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
+        <label>{isCorporate ? "Purpose of assignment" : "Purpose of stay"}<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option>Corporate assignment</option><option>Relocation / expatriate stay</option><option>Remote work / digital nomad</option><option>Family / personal stay</option><option>Leisure / holiday</option><option>Other</option></select></label>
         <div className="form-grid">
           <label>Arrival date<input type="date" min={localToday} value={arrival} onChange={e=>setArrival(e.target.value)}/></label>
           <label>Expected stay<select value={duration} onChange={e=>setDuration(e.target.value)}><option>1–3 nights</option><option>4–7 nights</option><option>1–4 weeks</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12 months or more</option><option>Flexible / not sure</option></select></label>
         </div>
         <div className="form-grid">
-          <label>{corporateMode ? "Employees / occupants" : "Number of guests"}<select value={guests} onChange={e=>setGuests(e.target.value)}>{[1,2,3,4,5,6,7,8].map(n=><option key={n}>{n}</option>)}</select></label>
+          <label>{isCorporate ? "Employees / occupants" : "Number of guests"}<select value={guests} onChange={e=>setGuests(e.target.value)}>{[1,2,3,4,5,6,7,8].map(n=><option key={n}>{n}</option>)}</select></label>
           <label>Your name<input required value={name} onChange={e=>setName(e.target.value)} placeholder="Full name"/></label>
         </div>
         <div className="form-grid">
           <label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@company.com"/></label>
-          <label>{corporateMode ? "Company / organisation" : "Company (optional)"}<input value={company} onChange={e=>setCompany(e.target.value)} placeholder="Organisation" required={corporateMode}/></label>
+          <label>{isCorporate ? "Company / organisation" : "Company (optional)"}<input value={company} onChange={e=>setCompany(e.target.value)} placeholder="Organisation" required={corporateMode}/></label>
         </div>
-        {corporateMode && <div className="form-grid">
+        {isCorporate && <div className="form-grid">
           <label>Contact phone<input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+254…"/></label>
           <label>Number of rooms<select value={rooms} onChange={e=>setRooms(e.target.value)}>{[1,2,3,4,5,6,7,8,9,10].map(n=><option key={n}>{n}</option>)}</select></label>
           <label>Corporate billing<select value={billing} onChange={e=>setBilling(e.target.value)}><option>To be discussed</option><option>Company invoice required</option><option>Direct payment by employer</option><option>Guest pays; company reimburses</option></select></label>
         </div>}
-        <label>{corporateMode ? "Assignment details / special requirements" : "Anything we should know?"}<textarea rows="3" value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Dates, room mix, invoicing, airport transfer, housekeeping needs…"/></label>
-        <button className="button button-dark button-wide" type="submit">{corporateMode ? "Request corporate quotation" : "Send enquiry via WhatsApp"} <ArrowUpRight size={17}/></button>
-        <p className="form-note">No payment is taken through this form. Rates and availability are confirmed personally.</p>
+        <label>{isCorporate ? "Assignment details / special requirements" : "Anything we should know?"}<textarea rows="3" value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Dates, room mix, invoicing, airport transfer, housekeeping needs…"/></label>
+        <label className="enquiry-consent"><input type="checkbox" required checked={privacyConsent} onChange={e => setPrivacyConsent(e.target.checked)}/><span>I agree that House of Amelia may use these details to respond to my enquiry. <a href="/privacy-policy/" target="_blank" rel="noreferrer">Privacy information</a>.</span></label>
+        <button className="button button-dark button-wide" type="submit">{isCorporate ? "Request corporate quotation" : "Continue with enquiry"} <ArrowUpRight size={17}/></button>
+        <p className="form-note">No payment is taken and no booking is confirmed by this form. We will continue in WhatsApp to confirm availability and rates.{ENQUIRY_ENDPOINT ? ' Your enquiry details will also be sent to our enquiry system.' : ''}</p>
       </form>
     </div>
   </div>;
@@ -474,7 +527,7 @@ export default function App() {
         <div className="corporate-image"><img src="/assets/images/corporate-accommodation.svg" alt="Comfortable furnished apartment living area" loading="lazy"/><div className="image-caption">YOUR OWN SPACE. OUR THOUGHTFUL SUPPORT.</div></div>
         <div className="corporate-copy"><span className="eyebrow">FOR BUSINESS & RELOCATION</span><h2>A better base for<br/><em>work and life.</em></h2><p>Accommodation should be the easiest part of a work assignment or relocation. We help organisations place employees, consultants and visiting teams in furnished residences, with tailored arrangements for stays of one month, six months or longer.</p>
           <div className="corporate-points"><div><Building2/><span><b>Corporate accommodation</b><small>Practical stays for teams, consultants and visiting executives.</small></span></div><div><Globe2/><span><b>Relocation & expatriate stays</b><small>A comfortable landing place while you make Kenya home.</small></span></div><div><CalendarDays/><span><b>Flexible durations</b><small>Nightly, monthly and longer-term arrangements.</small></span></div></div>
-          <button className="button button-dark" onClick={()=>enquire()}>Discuss corporate accommodation <ArrowUpRight size={17}/></button>
+          <button className="button button-dark" onClick={()=>enquire(undefined,true)}>Discuss corporate accommodation <ArrowUpRight size={17}/></button>
         </div>
       </section>
 
