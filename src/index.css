@@ -211,3 +211,17 @@
 .seo-nightly-rate strong{font:400 18px 'Playfair Display',serif;color:#29453a}
 .seo-nightly-rate span{font-size:10px;color:#858980}
 @media(max-width:800px){.corporate-enquiry{grid-template-columns:1fr;gap:35px}.corporate-enquiry-details{grid-template-columns:1fr}.corporate-enquiry-details article,.corporate-enquiry-details article:last-child{grid-column:auto;min-height:0}}
+
+
+/* Optional analytics consent */
+.analytics-consent{position:fixed;z-index:1200;left:22px;right:22px;bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:28px;max-width:1040px;margin:0 auto;padding:22px 24px;background:#fff;border:1px solid #dcd9cf;box-shadow:0 14px 50px #102a2226;color:#29453a}
+.analytics-consent-copy{max-width:650px}
+.analytics-consent-copy strong{display:block;font:500 19px 'Playfair Display',serif;margin-bottom:5px}
+.analytics-consent-copy p{font-size:12px;line-height:1.65;color:#68736a;margin:0 0 5px}
+.analytics-consent-copy a{font-size:11px;color:#806a42;text-decoration:underline;text-underline-offset:3px}
+.analytics-consent-actions{display:flex;flex:0 0 auto;gap:9px;align-items:center}
+.analytics-consent-actions button,.analytics-preferences{border:1px solid #b9b8ad;padding:11px 15px;background:#fff;color:#29453a;font:500 11px Inter,Arial,sans-serif;cursor:pointer}
+.analytics-consent-actions .analytics-accept{background:#173c36;color:#fff;border-color:#173c36}
+.analytics-consent-actions button:hover,.analytics-preferences:hover{border-color:#9b8053}
+.analytics-preferences{position:fixed;z-index:1190;left:18px;bottom:18px;background:#fff;box-shadow:0 5px 22px #102a2220;font-size:10px;padding:9px 12px}
+@media(max-width:700px){.analytics-consent{left:12px;right:12px;bottom:12px;display:block;padding:18px}.analytics-consent-actions{margin-top:14px;display:grid;grid-template-columns:1fr 1fr}.analytics-consent-actions button{padding:12px 8px}.analytics-preferences{left:12px;bottom:12px}}
