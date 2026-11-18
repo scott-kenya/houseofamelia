@@ -25,9 +25,24 @@ Deploy the contents of `dist/` to the web root for `https://www.houseofamelia.co
 - Build command: `npm run build`
 - Publish directory: `dist`
 
-## Enquiry flow
+## Enquiry flow and lead capture
 
-The enquiry form opens a WhatsApp conversation with the details entered by the guest. It does not take payment or confirm availability. Rates and availability are confirmed directly by House of Amelia.
+The enquiry form supports both individual and corporate enquiries. Nairobi residences appear first, with House of Amelia Nyali retained as the coastal option. Corporate landing-page calls to action open the corporate enquiry path; visitors can also switch between individual and corporate enquiry types inside the form.
+
+Every enquiry opens WhatsApp with the guest's details and campaign attribution. The form does not take payment or confirm availability. Rates and availability are confirmed directly by House of Amelia.
+
+### Optional lead-capture endpoint
+
+The frontend can also POST the enquiry payload to a secure HTTPS endpoint when `VITE_ENQUIRY_ENDPOINT` is configured at build time.
+
+1. Copy `.env.example` to `.env.local` for local development, or configure `VITE_ENQUIRY_ENDPOINT` in the production build environment.
+2. Set the variable to the HTTPS URL of a receiving endpoint that House of Amelia controls or has approved.
+3. Configure that endpoint to allow CORS requests from the exact House of Amelia website origin, validate the payload, apply spam/rate-limit protection, and store or forward enquiries securely.
+4. Test both individual and corporate submissions end-to-end before relying on the endpoint.
+
+The payload uses `schemaVersion: 1` and includes audience type, destination, residence, stay details, contact details, billing preference (corporate enquiries), landing page and UTM attribution. It contains personal information supplied by the enquirer. The endpoint must use HTTPS and an appropriate privacy notice, access controls and retention policy. Do not put API keys, passwords or other secrets in `VITE_*` variables: Vite exposes them in the public browser bundle.
+
+If the endpoint variable is not configured, the form continues to use WhatsApp only. If endpoint delivery fails, WhatsApp remains the enquiry handover path. A configured endpoint has not been connected or verified merely by adding this integration.
 
 ## Content notes
 
