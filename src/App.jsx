@@ -119,7 +119,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
           <label>Expected stay<select value={duration} onChange={e=>setDuration(e.target.value)}><option>1–3 nights</option><option>4–7 nights</option><option>1–4 weeks</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12 months or more</option><option>Flexible / not sure</option></select></label>
         </div>
         <div className="form-grid">
-          <label>Number of guests<select value={guests} onChange={e=>setGuests(e.target.value)}>{[1,2,3,4,5,6,7,8].map(n=><option key={n}>{n}</option>)}</select></label>
+          <label>{corporateMode ? "Employees / occupants" : "Number of guests"}<select value={guests} onChange={e=>setGuests(e.target.value)}>{[1,2,3,4,5,6,7,8].map(n=><option key={n}>{n}</option>)}</select></label>
           <label>Your name<input required value={name} onChange={e=>setName(e.target.value)} placeholder="Full name"/></label>
         </div>
         <div className="form-grid">
