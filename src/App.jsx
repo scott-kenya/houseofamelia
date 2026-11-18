@@ -325,7 +325,7 @@ export default function App() {
   const page = seoPages[window.location.pathname];
   const residencePage = residencePages[window.location.pathname];
   if (residencePage) return <><ResidenceDetailPage page={residencePage} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/></>;
-  if (page) return <><SeoLandingPage page={page} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected}/></>;
+  if (page) return <><SeoLandingPage page={page} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/></>;
   return <div id="top">
     <Header onEnquire={()=>enquire()}/>
     <main>
