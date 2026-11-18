@@ -51,9 +51,19 @@ If the endpoint variable is not configured, the form continues to use WhatsApp o
 - Nightly and monthly pricing are presented as enquiry-based. Add approved rates when final pricing is confirmed.
 - Confirm all property imagery, included services, and residence descriptions before publishing.
 
-## Before launch
+## Residence information and photography
 
-Replace the current illustrative interior photography on the Nairobi residence cards with verified photographs of the actual Gemland and Marquis residences. Confirm the Marquis bedroom count, exact neighbourhood, property details and any property-specific amenities before adding them to the public listing. The supplied original photo library primarily depicts the existing coastal property.
+The residence detail pages now present a concise property-at-a-glance summary, labelled gallery captions, a booking-confirmation note and clearer guidance on what guests should verify before booking.
+
+- Gemland is presented as a two-bedroom furnished apartment in Kileleshwa, Nairobi.
+- The Marquis is presented as a three-bedroom executive residence in Nairobi with a dedicated office/workspace. Its exact neighbourhood is intentionally not narrowed on the public page until confirmed.
+- The Marquis gallery labels building amenities as building facilities rather than implying that a gym, games lounge or cinema is a private in-apartment room.
+- Nairobi gallery notices explain that some images are illustrative or may depict shared facilities. Guests are asked to request current photographs and confirm facility access before booking.
+- Nyali is presented as a coastal residence in Nyali, Mombasa, with the stated two-minute walk to the beach.
+
+Before launch, replace illustrative Nairobi photography with verified current images of the actual Gemland and Marquis residences. Confirm the exact Marquis neighbourhood, room layout, property details and which building facilities are accessible to guests. Also confirm all property-specific amenities, service frequency and inclusions. Do not describe shared building facilities as private apartment amenities.
+
+Availability, final rates, inclusions and facility access remain subject to direct confirmation by House of Amelia. The website does not confirm a reservation or take payment through the enquiry form.
 
 ## Phase 2 SEO pages
 
