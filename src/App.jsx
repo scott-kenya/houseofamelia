@@ -7,6 +7,65 @@ import {
 } from 'lucide-react';
 
 const WHATSAPP = '254112415949';
+
+const GA4_MEASUREMENT_ID = 'G-24LLME0GBN';
+
+function loadGoogleAnalytics() {
+  if (typeof window === 'undefined' || window.__hoaGaLoaded) return;
+  window.__hoaGaLoaded = true;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', GA4_MEASUREMENT_ID, {
+    send_page_view: true,
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false
+  });
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_MEASUREMENT_ID;
+  script.id = 'hoa-google-analytics';
+  document.head.appendChild(script);
+}
+
+function AnalyticsConsent() {
+  const [choice, setChoice] = useState('loading');
+  useEffect(() => {
+    let saved = null;
+    try { saved = window.localStorage.getItem('hoa-analytics-consent'); } catch {}
+    if (saved === 'accepted') {
+      setChoice('accepted');
+      loadGoogleAnalytics();
+    } else if (saved === 'rejected') {
+      setChoice('rejected');
+    } else {
+      setChoice('undecided');
+    }
+  }, []);
+
+  const choose = value => {
+    try { window.localStorage.setItem('hoa-analytics-consent', value); } catch {}
+    setChoice(value);
+    if (value === 'accepted') loadGoogleAnalytics();
+  };
+
+  if (choice === 'loading') return null;
+  return <>
+    {choice === 'undecided' && <aside className="analytics-consent" aria-label="Analytics cookie preferences">
+      <div className="analytics-consent-copy">
+        <strong>Your privacy matters.</strong>
+        <p>We use optional analytics to understand how visitors find our residences and improve the enquiry experience. You can continue to WhatsApp without accepting analytics.</p>
+        <a href="/privacy-policy/">Read our privacy information</a>
+      </div>
+      <div className="analytics-consent-actions">
+        <button type="button" className="analytics-reject" onClick={() => choose('rejected')}>Reject optional</button>
+        <button type="button" className="analytics-accept" onClick={() => choose('accepted')}>Accept analytics</button>
+      </div>
+    </aside>}
+    {choice !== 'undecided' && <button type="button" className="analytics-preferences" onClick={() => setChoice('undecided')}>Privacy choices</button>}
+  </>;
+}
+
 const residences = [
   {
     id: 'gemland-2br',
@@ -114,16 +173,20 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
       ...(campaign.get('utm_term') ? [`Campaign term: ${campaign.get('utm_term')}`] : [])
     ];
     msg.push(...attribution);
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: corporateMode ? 'corporate_quote_request' : 'accommodation_enquiry',
-      residence: property,
-      stay_duration: duration,
-      purpose,
-      rooms_required: corporateMode ? rooms : '1',
-      lead_source: leadSource,
-      campaign: campaign.get('utm_campaign') || undefined
-    });
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', corporateMode ? 'corporate_quote_request' : 'accommodation_enquiry', {
+        residence: property,
+        stay_duration: duration,
+        purpose,
+        rooms_required: corporateMode ? rooms : '1',
+        lead_source: leadSource,
+        campaign_source: campaign.get('utm_source') || undefined,
+        campaign_medium: campaign.get('utm_medium') || undefined,
+        campaign_name: campaign.get('utm_campaign') || undefined,
+        campaign_content: campaign.get('utm_content') || undefined,
+        campaign_term: campaign.get('utm_term') || undefined
+      });
+    }
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg.join('\n'))}`, '_blank', 'noopener,noreferrer');
   };
   return <div className="modal-backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose()}>
@@ -376,8 +439,8 @@ export default function App() {
   const enquire=(id,corporate=false)=>{setSelected(id||'gemland-2br');setCorporateMode(corporate);setModal(true)};
   const page = seoPages[window.location.pathname];
   const residencePage = residencePages[window.location.pathname];
-  if (residencePage) return <><ResidenceDetailPage page={residencePage} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/></>;
-  if (page) return <><SeoLandingPage page={page} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/></>;
+  if (residencePage) return <><ResidenceDetailPage page={residencePage} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/><AnalyticsConsent/></>;
+  if (page) return <><SeoLandingPage page={page} onEnquire={enquire}/><EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/><AnalyticsConsent/></>;
   return <div id="top">
     <Header onEnquire={()=>enquire()}/>
     <main>
@@ -451,5 +514,6 @@ export default function App() {
     </footer>
     <a className="whatsapp-float" href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hello House of Amelia, I would like to enquire about a stay.')}`} target="_blank" rel="noreferrer" aria-label="Chat with House of Amelia on WhatsApp"><MessageCircle/></a>
     <EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/>
+    <AnalyticsConsent/>
   </div>;
 }
