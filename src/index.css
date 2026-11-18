@@ -234,3 +234,18 @@
 .enquiry-consent{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px!important;font-size:11px!important;line-height:1.65;color:#68736a}
 .enquiry-consent input{width:15px;height:15px;flex:0 0 15px;margin:2px 0 0;accent-color:#173c36}
 .enquiry-consent a{color:#806a42;text-decoration:underline;text-underline-offset:3px}
+
+
+/* Residence trust and presentation */
+.detail-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;background:#fff;border-bottom:1px solid #e5e2d8;padding-top:25px;padding-bottom:25px}
+.detail-facts>div{display:flex;flex-direction:column;gap:8px;padding:8px 22px;border-right:1px solid #e7e4da;min-width:0}
+.detail-facts>div:first-child{padding-left:0}
+.detail-facts>div:last-child{border-right:0}
+.detail-facts span{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:#8b8e83;font-weight:700}
+.detail-facts strong{font:400 17px/1.35 'Playfair Display',serif;color:#29453a}
+.gallery-verification-note{display:flex;flex-direction:column;gap:5px;padding:16px 19px;margin:-18px 0 28px;background:#eee9dc;border-left:3px solid #a58a5d;color:#62675d;font-size:11px;line-height:1.7}
+.gallery-verification-note strong{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#765f3e}
+.detail-gallery-grid figure figcaption{padding:10px 2px 2px;color:#68736a;font-size:10px;letter-spacing:.04em}
+.detail-booking-note{padding:14px 0 0;border-top:1px solid #e3e1d8!important;margin-top:15px!important}
+.detail-booking-note strong{display:block;color:#29453a;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+@media(max-width:760px){.detail-facts{grid-template-columns:1fr 1fr;padding:22px 24px;gap:0}.detail-facts>div{padding:13px 12px;border-bottom:1px solid #e7e4da}.detail-facts>div:first-child{padding-left:12px}.detail-facts>div:nth-child(2){border-right:0}.detail-facts>div:nth-child(3){padding-left:12px;border-bottom:0}.detail-facts>div:nth-child(4){border-right:0;border-bottom:0}.gallery-verification-note{margin:-10px 0 22px}}
