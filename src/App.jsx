@@ -162,6 +162,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
     const campaign = new URLSearchParams(window.location.search);
     const attribution = {
       source: campaign.get('utm_source') || document.referrer || 'Direct / unknown',
+      utmSource: campaign.get('utm_source') || '',
       medium: campaign.get('utm_medium') || '',
       campaign: campaign.get('utm_campaign') || '',
       content: campaign.get('utm_content') || '',
@@ -215,7 +216,7 @@ function EnquiryModal({ open, onClose, selected, corporateMode = false }) {
         purpose,
         rooms_required: isCorporate ? rooms : '1',
         lead_source: attribution.source,
-        campaign_source: attribution.source,
+        campaign_source: attribution.utmSource || undefined,
         campaign_medium: attribution.medium || undefined,
         campaign_name: attribution.campaign || undefined,
         campaign_content: attribution.content || undefined,
@@ -393,8 +394,8 @@ function SeoLandingPage({ page, onEnquire }) {
     script.textContent = JSON.stringify(schema);
     return () => { document.title = 'House of Amelia | Premium Serviced Apartments in Nairobi & Mombasa'; };
   }, [page]);
-  return <div id="top"><Header onEnquire={() => onEnquire()}/><main className="seo-page">
-    <section className="seo-hero"><span className="eyebrow">{page.eyebrow}</span><h1>{page.heading}</h1><p>{page.intro}</p><div className="hero-actions"><button className="button button-gold" onClick={() => onEnquire()}>Enquire about a stay <ArrowUpRight size={17}/></button><a className="text-link light" href="/">Explore House of Amelia <ArrowRight size={15}/></a></div></section>
+  return <div id="top"><Header onEnquire={() => onEnquire(undefined, Boolean(page.corporate))}/><main className="seo-page">
+    <section className="seo-hero"><span className="eyebrow">{page.eyebrow}</span><h1>{page.heading}</h1><p>{page.intro}</p><div className="hero-actions"><button className="button button-gold" onClick={() => onEnquire(undefined, Boolean(page.corporate))}>Enquire about a stay <ArrowUpRight size={17}/></button><a className="text-link light" href="/">Explore House of Amelia <ArrowRight size={15}/></a></div></section>
     <section className="seo-content section-pad"><div className="seo-content-intro"><span className="eyebrow">EXECUTIVE LIVING. EXCEPTIONAL STAYS.</span><h2>Find the right space<br/><em>for your next chapter.</em></h2></div>
       {page.sections.map(([heading, body]) => <article className="seo-copy-block" key={heading}><h2>{heading}</h2><p>{body}</p></article>)}
     </section>
@@ -411,7 +412,7 @@ function SeoLandingPage({ page, onEnquire }) {
     </div></section>
     <section className="seo-related section-pad"><span className="eyebrow">EXPLORE MORE</span><h2>More ways to <em>stay with us.</em></h2><div><a href="/serviced-apartments-nairobi/">Serviced apartments in Nairobi <ArrowUpRight size={14}/></a><a href="/executive-serviced-apartments-nairobi/">Executive serviced apartments <ArrowUpRight size={14}/></a><a href="/furnished-apartments-kileleshwa/">Furnished apartments in Kileleshwa <ArrowUpRight size={14}/></a><a href="/corporate-accommodation-nairobi/">Corporate accommodation <ArrowUpRight size={14}/></a><a href="/long-term-serviced-apartments-nairobi/">Long-term stays in Nairobi <ArrowUpRight size={14}/></a><a href="/serviced-apartments-nyali/">Serviced apartments in Nyali <ArrowUpRight size={14}/></a></div></section>
     <section className="seo-faq section-pad"><span className="eyebrow">GOOD TO KNOW</span><h2>Frequently asked <em>questions.</em></h2>{page.faqs.map(([q,a]) => <details key={q}><summary>{q}<ChevronDown size={17}/></summary><p>{a}</p></details>)}</section>
-    <section className="seo-cta"><span className="eyebrow">LET’S PLAN YOUR STAY</span><h2>Tell us what you <em>need.</em></h2><p>Share your dates and requirements. We’ll help you explore availability and a suitable rate.</p><button className="button button-gold" onClick={() => onEnquire()}>Make an enquiry <ArrowUpRight size={17}/></button></section>
+    <section className="seo-cta"><span className="eyebrow">LET’S PLAN YOUR STAY</span><h2>Tell us what you <em>need.</em></h2><p>Share your dates and requirements. We’ll help you explore availability and a suitable rate.</p><button className="button button-gold" onClick={() => onEnquire(undefined, Boolean(page.corporate))}>Make an enquiry <ArrowUpRight size={17}/></button></section>
   </main><footer className="footer"><div className="footer-bottom"><a href="/">House of Amelia</a><span>NAIROBI · MOMBASA · KENYA</span></div></footer></div>;
 }
 
