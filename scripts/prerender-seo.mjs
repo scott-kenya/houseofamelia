@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 // Remove homepage-specific JSON-LD before generating child routes.
-const base = fs.readFileSync('dist/index.html', 'utf8').replace(/<script type="application\\/ld\\+json">[\\s\\S]*?<\\/script>/, '');
+const base = fs.readFileSync("dist/index.html", "utf8").replace(/<script type="application\\/ld\\+json">[\\s\\S]*?<\\/script>/, "");
 const withStructuredData = (html, graph) => html.replace('</head>', '<script type="application/ld+json">' + JSON.stringify(graph).replace(/</g, '\\u003c') + '</script></head>');
 const breadcrumbs = (title, canonical) => ({ '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.houseofamelia.co.ke/' }, { '@type': 'ListItem', position: 2, name: title, item: canonical }] });
 const pages = [
