@@ -51,7 +51,8 @@ const residences = [
 
 function EnquiryModal({ open, onClose, selected }) {
   const [property, setProperty] = useState(selected || 'gemland-2br');
-  const [duration, setDuration] = useState('1–3 months');
+  const [duration, setDuration] = useState('6–12 months');
+  const [purpose, setPurpose] = useState('Relocation / expatriate stay');
   const [arrival, setArrival] = useState('');
   const [guests, setGuests] = useState('1');
   const [name, setName] = useState('');
@@ -93,6 +94,7 @@ function EnquiryModal({ open, onClose, selected }) {
       'Hello House of Amelia, I would like to enquire about accommodation.',
       `Residence: ${chosen?.name || property}`,
       `Preferred arrival: ${arrival || 'Flexible'}`,
+      `Purpose of stay: ${purpose}`,
       `Length of stay: ${duration}`,
       `Guests: ${guests}`,
       `Name: ${name}`,
@@ -110,6 +112,7 @@ function EnquiryModal({ open, onClose, selected }) {
       <p className="muted">Share a few details and our team will help with availability and a tailored rate.</p>
       <form onSubmit={submit}>
         <label>Preferred residence<select value={property} onChange={e=>setProperty(e.target.value)}>{residences.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
+        <label>Purpose of stay<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option>Corporate assignment</option><option>Relocation / expatriate stay</option><option>Remote work / digital nomad</option><option>Family / personal stay</option><option>Leisure / holiday</option><option>Other</option></select></label>
         <div className="form-grid">
           <label>Arrival date<input type="date" min={localToday} value={arrival} onChange={e=>setArrival(e.target.value)}/></label>
           <label>Expected stay<select value={duration} onChange={e=>setDuration(e.target.value)}><option>1–3 nights</option><option>4–7 nights</option><option>1–4 weeks</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12 months or more</option><option>Flexible / not sure</option></select></label>
@@ -308,9 +311,9 @@ export default function App() {
         <img className="hero-image" src="/assets/images/marquis.webp" alt="Elegant furnished residence interior"/>
         <div className="hero-shade"/>
         <div className="hero-content">
-          <span className="hero-kicker"><span/> A MORE CONSIDERED WAY TO STAY IN KENYA</span>
-          <h1>Feel at home.<br/><em>Wherever life takes you.</em></h1>
-          <p>Thoughtfully furnished serviced residences for executives, expatriates, corporate travellers and extended stays in Nairobi and Mombasa.</p>
+          <span className="hero-kicker"><span/> EXTENDED-STAY RESIDENCES IN KENYA</span>
+          <h1>More than a stay.<br/><em>A place to settle in.</em></h1>
+          <p>Furnished residences for corporate assignments, expatriate relocations and remote professionals staying in Nairobi and Mombasa — from a few months to a year or longer.</p>
           <div className="hero-actions"><button className="button button-gold" onClick={()=>enquire()}>Find your residence <ArrowUpRight size={17}/></button><a className="text-link light" href="#residences">Explore our residences <span>↓</span></a></div>
         </div>
         <div className="hero-bottom"><span>NAIROBI&nbsp; · &nbsp;MOMBASA</span><span>STAYS FROM A FEW NIGHTS TO A YEAR+</span></div>
@@ -325,14 +328,14 @@ export default function App() {
         <div className="section-heading"><div><span className="eyebrow">THE RESIDENCE COLLECTION</span><h2>Find your place<br/><em>in Kenya.</em></h2></div><p>Distinctive homes in two sought-after destinations, each designed to make everyday living feel considered and comfortable.</p></div>
         <div className="residence-grid">{residences.map((r,i)=><article className={`residence-card ${i===0?'featured':''}`} key={r.id}>
           <div className="residence-photo"><img src={r.image} alt={`Furnished residence interior for ${r.name}`} loading="lazy"/><span className="photo-tag">HOUSE OF AMELIA · {r.tag}</span></div>
-          <div className="residence-info"><div className="location"><MapPin size={14}/>{r.location}</div><h3>{r.name}</h3><div className="residence-type">{r.type}</div><p>{r.description}</p><div className="feature-list">{r.features.map(f=><span key={f}><Check size={13}/>{f}</span>)}</div><div className="rate-row"><div><small>FROM · PER NIGHT</small><strong>US$ {r.nightlyRate}</strong><span className="monthly-note">Monthly: request a quotation</span></div><button className="arrow-button" onClick={()=>enquire(r.id)} aria-label={`Enquire about ${r.name}`}><ArrowUpRight/></button></div><div className="residence-card-actions"><a className="text-link card-link" href={`/residences/${r.id === 'gemland-2br' ? 'gemland-executive-residence' : r.id === 'marquis-3br' ? 'the-marquis' : 'house-of-amelia-nyali'}/`}>View residence <ArrowRight size={15}/></a><button className="text-link card-link" onClick={()=>enquire(r.id)}>Enquire now <ArrowUpRight size={15}/></button></div></div>
+          <div className="residence-info"><div className="location"><MapPin size={14}/>{r.location}</div><h3>{r.name}</h3><div className="residence-type">{r.type}</div><p>{r.description}</p><div className="feature-list">{r.features.map(f=><span key={f}><Check size={13}/>{f}</span>)}</div><div className="rate-row"><div><small>INDICATIVE · PER NIGHT</small><strong>US$ {r.nightlyRate}</strong><span className="monthly-note">Monthly and 6+ month rates on request</span></div><button className="arrow-button" onClick={()=>enquire(r.id)} aria-label={`Enquire about ${r.name}`}><ArrowUpRight/></button></div><div className="residence-card-actions"><a className="text-link card-link" href={`/residences/${r.id === 'gemland-2br' ? 'gemland-executive-residence' : r.id === 'marquis-3br' ? 'the-marquis' : 'house-of-amelia-nyali'}/`}>View residence <ArrowRight size={15}/></a><button className="text-link card-link" onClick={()=>enquire(r.id)}>Enquire now <ArrowUpRight size={15}/></button></div></div>
         </article>)}</div>
         <p className="rate-disclaimer">Displayed nightly rates are indicative starting rates in US dollars. Final rates depend on dates, occupancy and length of stay. Monthly and corporate rates are available on request.</p>
       </section>
 
       <section className="corporate" id="corporate">
         <div className="corporate-image"><img src="/assets/images/corporate-accommodation.svg" alt="Comfortable furnished apartment living area" loading="lazy"/><div className="image-caption">YOUR OWN SPACE. OUR THOUGHTFUL SUPPORT.</div></div>
-        <div className="corporate-copy"><span className="eyebrow">FOR BUSINESS & RELOCATION</span><h2>Make room for<br/><em>what matters.</em></h2><p>Accommodation should be the easiest part of a work assignment or relocation. We support organisations and individuals with furnished residences and practical services for stays from one month to a year and beyond.</p>
+        <div className="corporate-copy"><span className="eyebrow">FOR BUSINESS & RELOCATION</span><h2>A better base for<br/><em>work and life.</em></h2><p>Accommodation should be the easiest part of a work assignment or relocation. We help organisations place employees, consultants and visiting teams in furnished residences, with tailored arrangements for stays of one month, six months or longer.</p>
           <div className="corporate-points"><div><Building2/><span><b>Corporate accommodation</b><small>Practical stays for teams, consultants and visiting executives.</small></span></div><div><Globe2/><span><b>Relocation & expatriate stays</b><small>A comfortable landing place while you make Kenya home.</small></span></div><div><CalendarDays/><span><b>Flexible durations</b><small>Nightly, monthly and longer-term arrangements.</small></span></div></div>
           <button className="button button-dark" onClick={()=>enquire()}>Discuss corporate accommodation <ArrowUpRight size={17}/></button>
         </div>
@@ -351,7 +354,7 @@ export default function App() {
       </section>
 
       <section className="longstay">
-        <div className="longstay-inner"><span className="eyebrow">STAY A LITTLE LONGER</span><h2>One month. Six months.<br/><em>A year or more.</em></h2><p>For longer assignments and new beginnings, discover a furnished home with the flexibility and support to make an extended stay feel natural.</p><button className="button button-gold" onClick={()=>enquire()}>Request a monthly rate <ArrowUpRight size={17}/></button></div>
+        <div className="longstay-inner"><span className="eyebrow">STAY A LITTLE LONGER</span><h2>Stay for six months.<br/><em>Feel at home for longer.</em></h2><p>For corporate placements, relocation and remote work, discover a furnished home with the space and practical support to make everyday life in Kenya feel settled. Ask us for a monthly or six-month-plus quotation.</p><button className="button button-gold" onClick={()=>enquire()}>Request a monthly rate <ArrowUpRight size={17}/></button></div>
         <div className="longstay-note"><Clock3/><span>Flexible stay arrangements<br/>tailored to your requirements</span></div>
       </section>
 
@@ -366,7 +369,7 @@ export default function App() {
       </section>
     </main>
     <footer className="footer">
-      <div className="footer-main"><div className="footer-brand"><a className="brand brand-footer" href="#top"><img className="brand-logo" src="/assets/hoa-logo.png" alt="House of Amelia logo"/><span>HOUSE <i>of</i> AMELIA</span><small>PREMIUM SERVICED ACCOMMODATION</small></a><p>Thoughtfully furnished residences for nightly, monthly and extended stays in Nairobi and Mombasa.</p></div>
+      <div className="footer-main"><div className="footer-brand"><a className="brand brand-footer" href="#top"><img className="brand-logo" src="/assets/hoa-logo.png" alt="House of Amelia logo"/><span>HOUSE <i>of</i> AMELIA</span><small>PREMIUM SERVICED ACCOMMODATION</small></a><p>Furnished residences for corporate assignments, expatriate relocations and extended stays in Nairobi and Mombasa.</p></div>
         <div><h4>Explore</h4><a href="#residences">Our residences</a><a href="/serviced-apartments-nairobi/">Serviced apartments Nairobi</a><a href="/executive-serviced-apartments-nairobi/">Executive apartments</a><a href="/corporate-accommodation-nairobi/">Corporate accommodation</a><a href="/long-term-serviced-apartments-nairobi/">Long stays</a></div>
         <div><h4>Destinations</h4><a href="/serviced-apartments-nairobi/">Nairobi</a><a href="/furnished-apartments-kileleshwa/">Kileleshwa</a><a href="/serviced-apartments-nyali/">Nyali, Mombasa</a></div>
         <div><h4>Get in touch</h4><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noreferrer"><MessageCircle size={15}/> WhatsApp us</a><a href="tel:+254112415949"><Phone size={15}/> +254 112 415 949</a><button onClick={()=>enquire()}>Send an enquiry <ArrowUpRight size={15}/></button></div>
