@@ -398,6 +398,6 @@ export default function App() {
       </div><div className="footer-bottom"><span>© {new Date().getFullYear()} House of Amelia. All rights reserved.</span><span>NAIROBI · MOMBASA · KENYA</span></div>
     </footer>
     <a className="whatsapp-float" href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hello House of Amelia, I would like to enquire about a stay.')}`} target="_blank" rel="noreferrer" aria-label="Chat with House of Amelia on WhatsApp"><MessageCircle/></a>
-    <EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected}/>
+    <EnquiryModal open={modal} onClose={()=>setModal(false)} selected={selected} corporateMode={corporateMode}/>
   </div>;
 }
